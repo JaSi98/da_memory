@@ -1,56 +1,311 @@
 @use '../abstracts/variables' as *;
+@use '../abstracts/functions' as *;
+
+$icon-path: '/images/icons';
+
+// Werte aus dem Figma-Design je Theme (Pixel beziehen sich auf den 1440er Frame).
+$bar-themes: (
+  'code-vibes': (
+    '--bar-bg': transparent,
+    '--bar-radius': 0,
+    '--bar-pad': 0,
+    '--bar-font': ('Red Rose', sans-serif),
+    '--scores-bg': rgba(#86e9d6, 0.2),
+    '--scores-radius': 0,
+    '--scores-pad': u(17) u(20),
+    '--scores-h': u(62),
+    '--scores-gap': u(20),
+    '--score-size': u(24),
+    '--score-weight': 700,
+    '--icon-mask': url('#{$icon-path}/label.svg'),
+    '--icon-w': u(24),
+    '--icon-h': u(20),
+    '--name-display': inline,
+    '--current-size': u(26),
+    '--current-weight': 400,
+    '--current-color': #fff,
+    '--current-spacing': 0,
+    '--token-w': u(29),
+    '--token-h': u(24),
+    '--token-radius': 0,
+    '--token-pad': 0,
+    '--token-bg': transparent,
+    '--token-icon': var(--active),
+    '--token-icon-w': u(29),
+    '--token-icon-h': u(24),
+    '--exit-bg': rgba(#86e9d6, 0.2),
+    '--exit-border': u(1) solid #4dd5bc,
+    '--exit-radius': 0,
+    '--exit-pad': u(16) u(24),
+    '--exit-size': u(24),
+    '--exit-spacing': 0,
+    '--exit-transform': none,
+    '--exit-color': #fff,
+    '--pc-blue': #2bb1ff,
+    '--pc-orange': #f58e39,
+    '--pc-green': #5fbf7a,
+    '--pc-purple': #a78bfa,
+  ),
+  'gaming': (
+    '--bar-bg': rgba(#fd96c9, 0.2),
+    '--bar-radius': u(10),
+    '--bar-pad': u(24),
+    '--bar-font': ('Orbitron', sans-serif),
+    '--scores-bg': #fff,
+    '--scores-radius': u(10),
+    '--scores-pad': 0 u(16),
+    '--scores-h': u(54),
+    '--scores-gap': u(40),
+    '--score-size': u(30),
+    '--score-weight': 700,
+    '--icon-mask': url('#{$icon-path}/chess-pawn.svg'),
+    '--icon-w': u(22),
+    '--icon-h': u(28),
+    '--name-display': none,
+    '--current-size': u(32),
+    '--current-weight': 700,
+    '--current-color': #fff,
+    '--current-spacing': 0.07em,
+    '--token-w': u(41),
+    '--token-h': u(40),
+    '--token-radius': u(3),
+    '--token-pad': u(4) u(8),
+    '--token-bg': var(--active-token),
+    '--token-icon': #fff,
+    '--token-icon-w': u(25),
+    '--token-icon-h': u(32),
+    '--exit-bg': rgba(#ed1b76, 0.08),
+    '--exit-border': u(2) solid #e71c4f,
+    '--exit-radius': u(10),
+    '--exit-pad': u(12) u(20),
+    '--exit-size': u(20),
+    '--exit-spacing': 0.04em,
+    '--exit-transform': none,
+    '--exit-color': #fff,
+    '--pc-blue': #097fc5,
+    '--pc-orange': #ea6900,
+    '--pc-green': #2f9e57,
+    '--pc-purple': #6d4fd8,
+    '--tc-blue': #1faafc,
+  ),
+  'da-projects': (
+    '--bar-bg': #f0f3f4,
+    '--bar-radius': u(10),
+    '--bar-pad': u(24),
+    '--bar-font': ('Figtree', sans-serif),
+    '--scores-bg': #fff,
+    '--scores-radius': u(10),
+    '--scores-pad': 0 u(16),
+    '--scores-h': u(54),
+    '--scores-gap': u(40),
+    '--score-size': u(30),
+    '--score-weight': 700,
+    '--icon-mask': url('#{$icon-path}/chess-pawn.svg'),
+    '--icon-w': u(20),
+    '--icon-h': u(25),
+    '--name-display': none,
+    '--current-size': u(32),
+    '--current-weight': 700,
+    '--current-color': #1e7594,
+    '--current-spacing': 0,
+    '--token-w': u(41),
+    '--token-h': u(40),
+    '--token-radius': u(8),
+    '--token-pad': u(4) u(8),
+    '--token-bg': var(--active-token),
+    '--token-icon': #fff,
+    '--token-icon-w': u(25),
+    '--token-icon-h': u(32),
+    '--exit-bg': #bfe5f2,
+    '--exit-border': 0 solid transparent,
+    '--exit-radius': u(10),
+    '--exit-pad': u(12) u(20),
+    '--exit-size': u(20),
+    '--exit-spacing': 0,
+    '--exit-transform': none,
+    '--exit-color': #1e7594,
+    '--pc-blue': #097fc5,
+    '--pc-orange': #ea6900,
+    '--pc-green': #2f9e57,
+    '--pc-purple': #6d4fd8,
+  ),
+  'foods': (
+    '--bar-bg': #f0e5d9,
+    '--bar-radius': u(10),
+    '--bar-pad': u(24),
+    '--bar-font': ('Delius Unicase', sans-serif),
+    '--current-font': ('Klee One', sans-serif),
+    '--scores-bg': #fff,
+    '--scores-radius': u(10),
+    '--scores-pad': 0 u(16),
+    '--scores-h': u(54),
+    '--scores-gap': u(40),
+    '--score-size': u(30),
+    '--score-weight': 700,
+    '--icon-mask': url('#{$icon-path}/chess-pawn.svg'),
+    '--icon-w': u(20),
+    '--icon-h': u(25),
+    '--name-display': none,
+    '--current-size': u(32),
+    '--current-weight': 600,
+    '--current-color': #a45212,
+    '--current-spacing': 0,
+    '--token-w': u(41),
+    '--token-h': u(40),
+    '--token-radius': u(8),
+    '--token-pad': u(4) u(8),
+    '--token-bg': var(--active-token),
+    '--token-icon': #fff,
+    '--token-icon-w': u(25),
+    '--token-icon-h': u(32),
+    '--exit-bg': #fff9f2,
+    '--exit-border': u(3) solid #f3832d,
+    '--exit-radius': u(10),
+    '--exit-pad': u(12) u(20),
+    '--exit-size': u(16),
+    '--exit-spacing': 0,
+    '--exit-transform': uppercase,
+    '--exit-color': #f3832d,
+    '--pc-blue': #097fc5,
+    '--pc-orange': #ea6900,
+    '--pc-green': #2f9e57,
+    '--pc-purple': #6d4fd8,
+  ),
+);
+
+@each $theme, $vars in $bar-themes {
+  [data-theme='#{$theme}'] .game-bar,
+  .endscreen[data-theme='#{$theme}'] {
+    @each $prop, $value in $vars {
+      #{$prop}: $value;
+    }
+  }
+}
 
 .game-bar {
+  --active-token: var(--tc-blue, var(--pc-blue));
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 16px 24px;
-  flex-wrap: wrap;
+  gap: u(16);
+  width: 100%;
+  max-width: u(1219);
+  margin-inline: auto;
+  padding: var(--bar-pad);
+  border-radius: var(--bar-radius);
+  background: var(--bar-bg);
+  font-family: var(--bar-font);
 
   &__scores {
     display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--scores-gap);
+    height: var(--scores-h);
+    padding: var(--scores-pad);
+    border-radius: var(--scores-radius);
+    background: var(--scores-bg);
   }
 
   &__score {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    border-radius: $radius-sm;
-    font-weight: 700;
-    background-color: rgba($color-white, 0.06);
-    transition: background-color $transition-fast, color $transition-fast;
+    gap: u(4);
+    font-size: var(--score-size);
+    font-weight: var(--score-weight);
+    line-height: 1;
+    color: var(--player);
+  }
+
+  &__name {
+    display: var(--name-display);
+    margin-right: u(4);
+  }
+
+  &__bot {
+    font-size: 0.7em;
+  }
+
+  &__icon,
+  &__exit-icon {
+    display: inline-block;
+    flex: none;
+    background-color: currentColor;
+    mask: var(--icon-mask) center / contain no-repeat;
+    -webkit-mask: var(--icon-mask) center / contain no-repeat;
+  }
+
+  &__icon {
+    width: var(--icon-w);
+    height: var(--icon-h);
   }
 
   &__current {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-weight: 600;
+    gap: u(10);
+    font-size: var(--current-size);
+    font-weight: var(--current-weight);
+    letter-spacing: var(--current-spacing);
+    color: var(--current-color);
+    line-height: 1;
+    font-family: var(--current-font, var(--bar-font));
   }
 
-  &__dot {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background-color: $color-blue;
+  &__token {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--token-w);
+    height: var(--token-h);
+    padding: var(--token-pad);
+    border-radius: var(--token-radius);
+    background: var(--token-bg);
+    color: var(--token-icon);
+
+    .game-bar__icon {
+      width: var(--token-icon-w);
+      height: var(--token-icon-h);
+    }
   }
 
-  @each $name, $color in $player-colors {
-    &__score--#{$name} {
-      color: $color;
+  &__exit {
+    display: inline-flex;
+    align-items: center;
+    gap: u(10);
+    padding: var(--exit-pad);
+    border: var(--exit-border);
+    border-radius: var(--exit-radius);
+    background: var(--exit-bg);
+    color: var(--exit-color);
+    font-family: var(--bar-font);
+    font-size: var(--exit-size);
+    font-weight: 700;
+    letter-spacing: var(--exit-spacing);
+    text-transform: var(--exit-transform);
+    line-height: 1;
+    transition: transform $transition-fast;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  &__exit-icon {
+    width: u(25.75);
+    height: u(22.5);
+    mask-image: url('#{$icon-path}/move-item.svg');
+    -webkit-mask-image: url('#{$icon-path}/move-item.svg');
+  }
+
+  @each $name in ('blue', 'orange', 'green', 'purple') {
+    &__score[data-player='#{$name}'] {
+      --player: var(--pc-#{$name});
     }
 
-    &[data-active-player='#{$name}'] &__score--#{$name} {
-      background-color: $color;
-      color: $color-bg;
-    }
-
-    &[data-active-player='#{$name}'] &__dot {
-      background-color: $color;
+    &[data-active-player='#{$name}'] {
+      --active: var(--pc-#{$name});
+      --active-token: var(--tc-#{$name}, var(--pc-#{$name}));
     }
   }
 }

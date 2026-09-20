@@ -1,23 +1,17 @@
-@use '../abstracts/variables' as *;
+@use '../abstracts/functions' as *;
 
 .board {
   display: grid;
-  gap: 16px;
-  max-width: 640px;
-  margin: 40px auto;
-  padding: 0 24px;
+  grid-template-columns: repeat(var(--cols), u(var(--card-w)));
+  gap: u(16);
+  justify-content: center;
 
   &[data-size='4x4'] {
-    grid-template-columns: repeat(4, 1fr);
+    --cols: 4;
   }
 
-  &[data-size='4x6'] {
-    grid-template-columns: repeat(6, 1fr);
-    max-width: 720px;
-  }
-
+  &[data-size='4x6'],
   &[data-size='6x6'] {
-    grid-template-columns: repeat(6, 1fr);
-    max-width: 780px;
+    --cols: 6;
   }
 }

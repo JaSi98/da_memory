@@ -3,34 +3,48 @@ import type { ThemeId, ThemeConfig } from '../models/theme.model';
 export const THEMES: Record<ThemeId, ThemeConfig> = {
   'code-vibes': {
     id: 'code-vibes',
-    label: 'Code vibes',
+    label: 'Code vibes theme',
     icon: '💻',
-    motifs: ['angular', 'typescript', 'javascript', 'html5', 'vscode', 'css3',
-             'django', 'git', 'terminal', 'python', 'github', 'node',
+    previewMotif: 'git',
+    motifs: ['git', 'typescript', 'javascript', 'html5', 'vscode', 'django',
+             'css3', 'angular', 'terminal', 'python', 'github', 'node',
              'bootstrap', 'vue', 'react', 'sass', 'sql', 'firebase'],
   },
   gaming: {
     id: 'gaming',
-    label: 'Gaming',
+    label: 'Gaming theme',
     icon: '🎮',
-    motifs: ['controller', 'dice', 'trophy', 'medal', 'target', 'rocket',
-             'star', 'heart', 'gem', 'shield', 'swords', 'coin',
-             'ghost', 'mushroom', 'joystick', 'puzzle', 'crown', 'lightning'],
+    previewMotif: 'dice',
+    motifs: ['circle-guard', 'square-guard', 'triangle-guard', 'labyrinth', 'creeper', 'mushroom',
+             'dice', 'banana', 'gamepad', 'ghosts', 'coin', 'spiral',
+             'level-up', 'pacman', 'handheld', 'puzzle', 'playing-card', 'play-button'],
   },
   'da-projects': {
     id: 'da-projects',
-    label: 'DA Projects',
+    label: 'DA Projects theme',
     icon: '🗂️',
-    motifs: ['folder', 'chart', 'archive', 'calculator', 'desktop', 'mouse',
-             'keyboard', 'wrench', 'tools', 'toolbox', 'graph', 'ruler',
-             'flask', 'plug', 'disk', 'cabinet', 'clipboard', 'printer'],
+    previewMotif: 'shark',
+    motifs: ['noodles', 'ramen', 'egg', 'blossom', 'join', 'chef-hat',
+             'recycle', 'basket', 'pokeball', 'tic-tac-toe', 'smiley', 'arrow',
+             'chat', 'sombrero', 'broccoli', 'network', 'shark', 'coins'],
   },
   foods: {
     id: 'foods',
-    label: 'Foods',
+    label: 'Foods theme',
     icon: '🍔',
-    motifs: ['burger', 'pizza', 'fries', 'hotdog', 'donut', 'cookie',
-             'icecream', 'chocolate', 'popcorn', 'croissant', 'apple', 'banana',
-             'grapes', 'watermelon', 'cherries', 'cake', 'cupcake', 'avocado'],
+    previewMotif: 'wrap',
+    motifs: ['fries', 'pizza', 'sandwich', 'donut', 'sushi', 'corn-dog',
+             'burger', 'pretzel', 'cupcake', 'pudding', 'flan', 'chocolate',
+             'fried-chicken', 'wrap', 'taco', 'ice-cream', 'salad', 'macarons'],
   },
 };
+
+/** Pfad zum Cover-SVG (verdeckte Kartenseite) eines Themes. */
+export function coverUrl(theme: ThemeId): string {
+  return `/images/${theme}/cover.svg`;
+}
+
+/** Pfad zum Motiv-SVG (aufgedeckte Kartenseite) eines Themes. */
+export function motifUrl(theme: ThemeId, motif: string): string {
+  return `/images/${theme}/${motif}.svg`;
+}

@@ -1,7 +1,11 @@
 @use '../abstracts/variables' as *;
+@use '../abstracts/functions' as *;
 
 .card {
-  aspect-ratio: 1;
+  position: relative;
+  width: u(var(--card-w));
+  height: u(var(--card-h));
+  padding: 0;
   perspective: 800px;
 
   &__inner {
@@ -20,40 +24,21 @@
   &__face {
     position: absolute;
     inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: $radius-md;
+    width: 100%;
+    height: 100%;
+    border-radius: u(var(--card-radius));
+    box-shadow: var(--card-shadow);
     backface-visibility: hidden;
-    font-size: 2rem;
-  }
-
-  &__face--back {
-    background: linear-gradient(135deg, $color-teal, $color-teal-dark);
-    color: rgba($color-white, 0.85);
-
-    @each $theme, $colors in $theme-colors {
-      [data-theme='#{$theme}'] & {
-        background: linear-gradient(135deg, nth($colors, 1), nth($colors, 2));
-      }
-    }
+    -webkit-backface-visibility: hidden;
   }
 
   &__face--front {
-    background-color: $color-white;
     transform: rotateY(180deg);
-    padding: 18%;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
   }
 
   @each $name, $color in $player-colors {
     &.is-matched--#{$name} &__face--front {
-      box-shadow: 0 0 0 4px $color;
+      box-shadow: 0 0 0 u(4) $color, var(--card-shadow);
     }
   }
 }

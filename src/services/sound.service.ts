@@ -60,3 +60,9 @@ export function playDraw(): void {
   playTone(349, 0.3, 0, 'sine');
   playTone(311, 0.35, 0.25, 'sine');
 }
+
+/** Spielt einen kurzen Knall mit hellem Funkeln fuer ein Feuerwerk. */
+export function playPop(): void {
+  playTone(196, 0.14, 0, 'sine');
+  playTone(1320, 0.08, 0.02);
+}

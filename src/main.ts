@@ -3,7 +3,7 @@ import { renderHomeScreen } from './screens/home.screen';
 import { renderSettingsScreen } from './screens/settings.screen';
 import { renderGameOverScreen } from './screens/gameover.screen';
 import { startGame } from './game/game';
-import type { GameSettings, PlayerColor } from './models/theme.model';
+import type { GameSettings, PlayerColor, ThemeId } from './models/theme.model';
 
 type Scores = Partial<Record<PlayerColor, number>>;
 
@@ -19,12 +19,12 @@ function showSettings(content: HTMLElement): void {
 
 /** Startet das Spiel; bei Spielende oder Abbruch wechselt der Screen. */
 function showGame(content: HTMLElement, settings: GameSettings): void {
-  startGame(content, settings, (scores) => showGameOver(content, scores), () => showHome(content));
+  startGame(content, settings, (scores) => showGameOver(content, scores, settings.theme), () => showHome(content));
 }
 
 /** Zeigt das Ergebnis; "Back to start" fuehrt zurueck zum Homescreen. */
-function showGameOver(content: HTMLElement, scores: Scores): void {
-  renderGameOverScreen(content, scores, () => showHome(content));
+function showGameOver(content: HTMLElement, scores: Scores, theme: ThemeId): void {
+  renderGameOverScreen(content, scores, theme, () => showHome(content));
 }
 
 function init(): void {

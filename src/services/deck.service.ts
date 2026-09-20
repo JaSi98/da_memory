@@ -1,5 +1,5 @@
 import { Card } from '../models/card.model';
-import { THEMES } from '../config/theme.config';
+import { THEMES, motifUrl } from '../config/theme.config';
 import type { BoardSize, ThemeId } from '../models/theme.model';
 
 const PAIRS_BY_SIZE: Record<BoardSize, number> = {
@@ -25,7 +25,7 @@ function pickMotifs(theme: ThemeId, size: BoardSize): string[] {
 
 /** Erzeugt eine Karte samt Pfad zum Motiv-SVG. */
 function createCard(id: number, pairId: number, motif: string, theme: ThemeId): Card {
-  return new Card(id, pairId, motif, `/images/${theme}/${motif}.svg`);
+  return new Card(id, pairId, motif.replace(/-/g, ' '), motifUrl(theme, motif));
 }
 
 /** Baut ein gemischtes Deck mit je zwei Karten pro Motiv. */

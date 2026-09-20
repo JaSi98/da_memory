@@ -1,39 +1,108 @@
 @use '../abstracts/variables' as *;
+@use '../abstracts/functions' as *;
 
-@keyframes float {
-  0%, 100% { transform: translateY(0) rotate(-6deg); }
-  50% { transform: translateY(-14px) rotate(-6deg); }
-}
+$controller: url('/images/icons/stadia-controller.svg');
+$ease: cubic-bezier(0.22, 1, 0.36, 1);
 
 .home {
-  position: relative;
+  --s: min(calc(100vw / 1440), calc(100vh / 1024), 1px);
+
+  display: grid;
+  place-items: center;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 32px;
-  padding: 10vh 8vw;
   overflow: hidden;
+  background: $color-bg;
+
+  &__stage {
+    position: relative;
+    width: u(1440);
+    height: u(1024);
+  }
+
+  &__decor {
+    position: absolute;
+    left: u(-39);
+    top: u(640.7);
+    width: u(414.31);
+    height: u(301.31);
+    background: $color-yellow;
+    opacity: 0.05;
+    mask: $controller center / contain no-repeat;
+    -webkit-mask: $controller center / contain no-repeat;
+    transform: rotate(-37.42deg);
+    pointer-events: none;
+  }
 
   &__intro {
-    font-size: 1.3rem;
-    color: rgba($color-white, 0.7);
+    position: absolute;
+    left: u(225);
+    top: u(339);
+    color: $color-white;
+  }
+
+  &__hello {
+    font: 400 u(48) / 1.125 'Almarai', sans-serif;
   }
 
   &__title {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    font-weight: 800;
+    font: 700 u(140) / 1.25 'Red Rose', sans-serif;
   }
 
-  &__icon {
+  &__play {
     position: absolute;
-    left: -40px;
-    bottom: -60px;
-    font-size: 18rem;
-    opacity: 0.15;
-    filter: grayscale(1) brightness(1.6);
-    animation: float 4s ease-in-out infinite;
-    pointer-events: none;
+    left: 50%;
+    top: u(653);
+    display: flex;
+    align-items: center;
+    gap: u(20);
+    padding: u(24);
+    transform: translateX(-50%);
+    background: $color-yellow;
+    color: $color-bg;
+    font: 700 u(40) / u(50) 'Red Rose', sans-serif;
+    transition: transform 200ms $ease;
+
+    &:active {
+      transform: translateX(-50%) scale(0.97);
+    }
+  }
+
+  &__play-box {
+    display: grid;
+    place-items: center;
+    width: u(44);
+    height: u(32);
+    transition: width 300ms $ease, height 300ms $ease;
+  }
+
+  &__play-icon {
+    width: u(44);
+    height: u(32);
+    background: currentColor;
+    mask: $controller center / contain no-repeat;
+    -webkit-mask: $controller center / contain no-repeat;
+    transition: transform 300ms $ease;
+  }
+
+  &__arrow {
+    width: u(33);
+    height: u(16);
+    stroke-width: 2;
+    transition: width 300ms $ease, stroke-width 300ms $ease;
+  }
+
+  // Hover-Variante aus Figma: Controller waechst und dreht sich, der Pfeil wird kraeftiger.
+  &__play:hover &__play-box {
+    width: u(60.2);
+    height: u(53.9);
+  }
+
+  &__play:hover &__play-icon {
+    transform: scale(1.125) rotate(-25.77deg);
+  }
+
+  &__play:hover &__arrow {
+    width: u(36);
+    stroke-width: 4;
   }
 }

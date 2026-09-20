@@ -1,77 +1,144 @@
 @use '../abstracts/variables' as *;
+@use '../abstracts/functions' as *;
+
+$ease: cubic-bezier(0.22, 1, 0.36, 1);
+$marker-color: #e9d54d;
+$marker: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 20' preserveAspectRatio='none'%3E%3Crect x='0' y='7' width='50' height='6' fill='%23E9D54D'/%3E%3Cpolygon points='50,0 60,10 50,20 40,10' fill='%23E9D54D'/%3E%3C/svg%3E");
+$start-icon: url('/images/icons/smart-display.svg');
+
+// Bühne der Live-Vorschau je Theme (Farben/Kartenmaße aus den Figma-Mockups).
+$stage-themes: (
+  'code-vibes': (
+    '--stage-bg': linear-gradient(to top right, #5a5b5b, #2e2f2f 62%),
+    '--pw': 190,
+    '--ph': 190,
+    '--pr': 0,
+  ),
+  'gaming': (
+    '--stage-bg': linear-gradient(to top right, #2a84ac, #2c4f60 65%),
+    '--pw': 170,
+    '--ph': 220,
+    '--pr': 19,
+  ),
+  'da-projects': (
+    '--stage-bg': #bfe5f2,
+    '--pw': 180,
+    '--ph': 150,
+    '--pr': 20,
+  ),
+  'foods': (
+    '--stage-bg': #e7e1db,
+    '--pw': 172,
+    '--ph': 172,
+    '--pr': 0,
+  ),
+);
 
 .settings {
+  --ps: min(calc(100vw / 1440), calc(100vh / 1024), 1px);
+  --s: var(--ps);
+
+  display: grid;
+  place-items: center;
   min-height: 100vh;
-  background-color: $color-white;
+  overflow: hidden;
+  background: $color-white;
   color: $color-bg;
-  padding: 6vh 8vw;
+  font-family: 'Almarai', sans-serif;
+
+  &__frame {
+    position: relative;
+    width: u(1440);
+    height: u(1024);
+  }
 
   &__title {
-    font-size: 2.8rem;
-    font-weight: 800;
-    display: inline-block;
-    position: relative;
-    margin-bottom: 40px;
+    position: absolute;
+    left: u(186);
+    top: u(113);
+    font: 700 u(54) / u(67) 'Red Rose', sans-serif;
 
+    // Gelbe Linie mit Raute unter der Überschrift
+    &::before,
     &::after {
       content: '';
       position: absolute;
-      bottom: -12px;
-      left: -10px;
-      width: calc(100% + 10px);
-      height: 20px;
-      background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='10' y='7' width='100%25' height='6' fill='%23E9D54D'/%3E%3Cpolygon points='10,0 20,10 10,20 0,10' fill='%23E9D54D'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
+      background: $marker-color;
+    }
+
+    &::after {
+      left: u(-15);
+      right: u(-14);
+      bottom: u(-2);
+      height: u(4);
+    }
+
+    &::before {
+      left: u(-22);
+      bottom: u(-7);
+      width: u(10);
+      height: u(10);
+      transform: rotate(45deg);
     }
   }
 
-  &__layout {
-    display: flex;
-    gap: 60px;
-    flex-wrap: wrap;
-  }
-
   &__form {
-    flex: 1 1 320px;
+    position: absolute;
+    left: u(184);
+    top: u(243.5);
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: u(55.5);
   }
 
   &__section legend {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 12px;
+    gap: u(15);
+    margin-bottom: u(20);
+    font: 700 u(24) / u(27) 'Almarai', sans-serif;
+  }
+
+  &__icon {
+    width: u(27);
+    height: u(27);
+    object-fit: contain;
   }
 
   &__options {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: u(14.5);
+    margin-left: u(32);
     list-style: none;
-
-    &:not(:hover) .settings__option input:checked + label {
-      font-weight: bold;
-
-      &::after {
-        display: inline-block;
-      }
-    }
   }
 
   &__option {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 1rem;
+    gap: u(12);
+    font: 400 u(20) / u(22) 'Almarai', sans-serif;
 
     input {
-      accent-color: $color-teal-dark;
-      width: 18px;
-      height: 18px;
+      appearance: none;
+      flex: none;
+      width: u(20);
+      height: u(20);
+      margin: 0;
+      border: u(2) solid $color-bg;
+      border-radius: 50%;
+      background: radial-gradient(circle, $color-bg 0 32%, transparent 36%) no-repeat center / 0 0;
+      transition: background-size 200ms $ease;
+      cursor: pointer;
+
+      &:checked {
+        background-size: 100% 100%;
+      }
+
+      &:focus-visible {
+        outline: u(2) solid $marker-color;
+        outline-offset: u(3);
+      }
     }
 
     label {
@@ -79,78 +146,164 @@
       align-items: center;
       cursor: pointer;
 
+      // Gelber Marker: wird beim Hover/Auswählen von links eingeblendet
       &::after {
         content: '';
-        display: none;
-        width: 60px;
-        height: 20px;
-        margin-left: 15px;
-        vertical-align: middle;
-        transform: translateY(-1px);
-        background-image: url("data:image/svg+xml,%3Csvg width='60' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0' y='7' width='50' height='6' fill='%23E9D54D'/%3E%3Cpolygon points='50,0 60,10 50,20 40,10' fill='%23E9D54D'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: center;
+        width: u(50);
+        height: u(14);
+        margin-left: u(18);
+        background: $marker center / 100% 100% no-repeat;
+        opacity: 0;
+        clip-path: inset(0 100% 0 0);
+        transition: clip-path 350ms $ease, opacity 200ms ease;
       }
     }
 
-    &:hover label {
-      font-weight: bold;
+    &:hover label,
+    input:focus-visible + label {
+      font-weight: 700;
 
       &::after {
-        display: inline-block;
+        opacity: 1;
+        clip-path: inset(0);
       }
+    }
+  }
+
+  // Nur die gewählte Option zeigt den Marker, solange keine andere überfahren wird.
+  &__options:not(:hover) &__option input:checked + label {
+    font-weight: 700;
+
+    &::after {
+      opacity: 1;
+      clip-path: inset(0);
     }
   }
 
   &__preview {
-    flex: 1 1 280px;
+    position: absolute;
+    left: u(726);
+    top: u(241);
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: u(44);
+    width: u(546);
   }
 
   &__stage {
-    background-color: $color-bg;
-    border-radius: $radius-lg;
-    min-height: 320px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
+    // Game Bar der Vorschau ist verkleinert (Bar: 474 von 1219 Figma-Pixeln).
+    --s: calc(var(--ps) * 0.389);
 
-    @each $theme, $colors in $theme-colors {
-      &[data-theme='#{$theme}'] .settings__preview-card:first-child {
-        background: linear-gradient(135deg, nth($colors, 1), nth($colors, 2));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(38 * var(--ps));
+    width: 100%;
+    height: calc(412 * var(--ps));
+    padding: calc(22 * var(--ps)) calc(36 * var(--ps));
+    border-radius: calc(20 * var(--ps));
+    background: var(--stage-bg);
+    overflow: hidden;
+
+    &-cards {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+    }
+
+    @each $theme, $vars in $stage-themes {
+      &[data-theme='#{$theme}'] {
+        @each $prop, $value in $vars {
+          #{$prop}: $value;
+        }
       }
     }
   }
 
   &__preview-card {
-    width: 110px;
-    height: 110px;
-    border-radius: $radius-md;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.4rem;
-    background: linear-gradient(135deg, $color-teal, $color-teal-dark);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+    width: calc(var(--pw) * var(--ps));
+    height: calc(var(--ph) * var(--ps));
+    border-radius: calc(var(--pr) * var(--ps));
+    object-fit: fill;
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.25);
+    position: relative;
 
     &:first-child {
-      transform: rotate(-8deg);
+      z-index: 2;
+      transform: rotate(-5deg) translateY(-8px);
     }
 
     &:last-child {
-      transform: rotate(6deg);
-      background: $color-white;
+      z-index: 1;
+      margin-left: calc(-28 * var(--ps));
+      transform: rotate(12deg) translateY(12px);
     }
   }
 
   &__breadcrumb {
     display: flex;
     align-items: center;
-    gap: 10px;
-    color: rgba($color-bg, 0.5);
-    font-weight: 600;
+    gap: u(16);
+    height: u(80);
+    padding: 0 u(20) 0 u(24);
+    background: #f5f5f5;
+    font: 400 u(20) / u(22) 'Almarai', sans-serif;
+  }
+
+  // Schräge Trennstriche; gewählte Werte bekommen eine Raute am Fuß.
+  &__crumb {
+    display: inline-flex;
+    align-items: center;
+    gap: u(16);
+    white-space: nowrap;
+
+    &:not(:last-of-type)::after {
+      content: '';
+      width: u(6);
+      height: u(40);
+      background: $marker-color;
+      transform: skewX(-20deg);
+    }
+
+    &.is-filled:not(:last-of-type)::after {
+      background: linear-gradient($marker-color, $marker-color) top / 100% 78% no-repeat,
+        linear-gradient(45deg, transparent 50%, $marker-color 50%) bottom / 100% 22% no-repeat;
+    }
+  }
+
+  &__start {
+    display: inline-flex;
+    align-items: center;
+    gap: u(8);
+    margin-left: auto;
+    padding: u(14) u(20);
+    background: $color-yellow;
+    color: $color-bg;
+    font: 700 u(20) / u(25) 'Red Rose', sans-serif;
+    transition: transform 250ms $ease, background-color 200ms ease, color 200ms ease;
+
+    &:disabled {
+      background: #dcdcd6;
+      color: #a4a49e;
+      cursor: not-allowed;
+    }
+
+    &:not(:disabled):hover {
+      transform: scale(1.15);
+
+      .settings__start-icon {
+        transform: rotate(-16deg);
+      }
+    }
+  }
+
+  &__start-icon {
+    width: u(20);
+    height: u(16);
+    background: currentColor;
+    mask: $start-icon center / contain no-repeat;
+    -webkit-mask: $start-icon center / contain no-repeat;
+    transition: transform 250ms $ease;
   }
 }

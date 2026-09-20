@@ -1,5 +1,53 @@
-@use '../abstracts/variables' as *;
+@use '../abstracts/functions' as *;
+
+// Maße der Karten und Seitenfarbe je Theme (Figma-Frames, Pixel im 1440er Raster).
+$game-themes: (
+  'code-vibes': (
+    '--page-bg': #303131,
+    '--card-w': 120,
+    '--card-h': 120,
+    '--card-radius': 0,
+    '--card-shadow': none,
+  ),
+  'gaming': (
+    '--page-bg': #294f60,
+    '--card-w': 105,
+    '--card-h': 120,
+    '--card-radius': 12,
+    '--card-shadow': (u(6) u(6) u(12) rgba(#000, 0.25)),
+  ),
+  'da-projects': (
+    '--page-bg': #fff,
+    '--card-w': 120,
+    '--card-h': 100,
+    '--card-radius': 13,
+    '--card-shadow': none,
+  ),
+  'foods': (
+    '--page-bg': #fff,
+    '--card-w': 122,
+    '--card-h': 122,
+    '--card-radius': 0,
+    '--card-shadow': none,
+  ),
+);
 
 .game-screen {
+  --s: min(calc(100vw / 1440), calc(100vh / 1024), 1px);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: u(55);
   min-height: 100vh;
+  padding: u(40) 0 0;
+  background: var(--page-bg);
+
+  @each $theme, $vars in $game-themes {
+    &[data-theme='#{$theme}'] {
+      @each $prop, $value in $vars {
+        #{$prop}: $value;
+      }
+    }
+  }
 }

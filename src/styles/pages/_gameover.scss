@@ -1,49 +1,413 @@
 @use '../abstracts/variables' as *;
+@use '../abstracts/functions' as *;
 
-.gameover {
+$ease: cubic-bezier(0.22, 1, 0.36, 1);
+$spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+$pawn: url('/images/icons/chess-pawn.svg');
+$scale: url('/images/end/scale.svg');
+
+// Gestaltung der End-Screens je Theme (Pixel im 1440er Raster, Farben/Schriften aus Figma).
+$end-themes: (
+  'code-vibes': (
+    '--bg-over': #303131,
+    '--bg-result': #303131,
+    '--fg-over': #fff,
+    '--fg-result': #fff,
+    '--end-font': ('Red Rose', sans-serif),
+    '--name-size': 96,
+    '--name-weight': 700,
+    '--name-case': uppercase,
+    '--accent': #4dd5bc,
+    '--button-bg': rgba(#86e9d6, 0.2),
+    '--button-border': 1px solid #4dd5bc,
+    '--button-color': #fff,
+    '--button-radius': 0,
+    '--button-size': 24,
+    '--badge-font': ('Red Rose', sans-serif),
+  ),
+  'gaming': (
+    '--bg-over': #294f60,
+    '--bg-result': #294f60,
+    '--fg-over': #fff,
+    '--fg-result': #fff,
+    '--end-font': ('Orbitron', sans-serif),
+    '--name-size': 88,
+    '--name-weight': 700,
+    '--name-case': none,
+    '--accent': #ed1b76,
+    '--button-bg': rgba(#ed1b76, 0.12),
+    '--button-border': 2px solid #e71c4f,
+    '--button-color': #fff,
+    '--button-radius': 10,
+    '--button-size': 24,
+    '--badge-font': ('Orbitron', sans-serif),
+    '--hc-blue': #2bb1ff,
+    '--hc-orange': #ff8a1f,
+    '--hc-green': #5fe08a,
+    '--hc-purple': #b39dff,
+  ),
+  'da-projects': (
+    '--bg-over': #1e7594,
+    '--bg-result': #1e7594,
+    '--fg-over': #fff,
+    '--fg-result': #fff,
+    '--end-font': ('Figtree', sans-serif),
+    '--name-size': 104,
+    '--name-weight': 700,
+    '--name-case': none,
+    '--name-fixed': #fff,
+    '--accent': #fa5a5a,
+    '--button-bg': #bfe5f2,
+    '--button-border': 0 solid transparent,
+    '--button-color': #1e7594,
+    '--button-radius': 10,
+    '--button-size': 24,
+    '--badge-font': ('Figtree', sans-serif),
+  ),
+  'foods': (
+    '--bg-over': #f3832d,
+    '--bg-result': #f6f6f6,
+    '--fg-over': #fff,
+    '--fg-result': #a45212,
+    '--end-font': ('Klee One', sans-serif),
+    '--name-size': 96,
+    '--name-weight': 400,
+    '--name-case': none,
+    '--name-fixed': #a45212,
+    '--accent': #f3832d,
+    '--button-bg': #f3832d,
+    '--button-border': 0 solid transparent,
+    '--button-color': #fff,
+    '--button-radius': 10,
+    '--button-size': 22,
+    '--badge-font': ('Klee One', sans-serif),
+  ),
+);
+
+@keyframes badge-in {
+  0% { opacity: 0; transform: scale(0.4) rotate(-8deg); }
+  60% { opacity: 1; transform: scale(1.08) rotate(2deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(u(28)); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes letter-in {
+  0% { opacity: 0; transform: translateY(45%) scale(0.5) rotate(-10deg); }
+  70% { opacity: 1; transform: translateY(-8%) scale(1.1) rotate(2deg); }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes hero-in {
+  0% { opacity: 0; transform: scale(0.2) rotate(-25deg); }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(u(-14)) rotate(2deg); }
+}
+
+@keyframes swing {
+  0%, 100% { transform: rotate(-9deg); }
+  50% { transform: rotate(9deg); }
+}
+
+@keyframes glow {
+  0%, 100% { opacity: 0.55; transform: scale(0.92); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+@keyframes grid-run {
+  to { background-position: 0 u(60); }
+}
+
+.endscreen {
+  --ps: min(calc(100vw / 1440), calc(100vh / 1024), 1px);
+  --s: var(--ps);
+
+  position: relative;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;
-  text-align: center;
-  padding: 40px;
+  overflow: hidden;
+  background: var(--bg-over);
+  color: var(--fg-over);
+  font-family: var(--end-font);
+  transition: background-color 700ms ease, color 700ms ease;
+
+  &[data-phase='result'] {
+    background: var(--bg-result);
+    color: var(--fg-result);
+  }
+
+  // Gaming: Retro-Gitter, das langsam auf den Betrachter zuläuft
+  &[data-theme='gaming']::before {
+    content: '';
+    position: absolute;
+    inset: 55% -20% -10%;
+    background-image: linear-gradient(rgba(#ed1b76, 0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(#ed1b76, 0.4) 1px, transparent 1px);
+    background-size: u(60) u(60);
+    transform: perspective(u(420)) rotateX(62deg);
+    mask: linear-gradient(transparent, #000 60%);
+    animation: grid-run 2.4s linear infinite;
+  }
+
+  // DA Projects: weiche Lichtflecken, die langsam driften
+  &[data-theme='da-projects']::before {
+    content: '';
+    position: absolute;
+    inset: -20%;
+    background: radial-gradient(circle at 20% 30%, rgba(#bfe5f2, 0.25), transparent 30%),
+      radial-gradient(circle at 80% 70%, rgba(#fa5a5a, 0.16), transparent 32%);
+    animation: float 9s ease-in-out infinite;
+  }
+
+  &__fx {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  &__panel {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  &__panel--over {
+    gap: u(48);
+    transition: transform 600ms $ease 100ms, opacity 400ms ease 100ms;
+  }
+
+  &[data-phase='result'] &__panel--over {
+    transform: translateY(-110%);
+    opacity: 0;
+  }
+
+  &__panel--result {
+    gap: u(20);
+    transform: translateY(-110%);
+    visibility: hidden;
+    transition: transform 700ms $ease, visibility 0s linear 700ms;
+  }
+
+  &[data-theme='gaming'] &__panel--result {
+    transform: translateY(110%);
+  }
+
+  &[data-phase='result'] &__panel--result {
+    transform: none;
+    visibility: visible;
+    transition-delay: 0s;
+  }
 
   &__title {
-    font-size: 3.5rem;
-    font-weight: 800;
-    color: $color-teal;
-    text-shadow: 0 0 24px rgba($color-teal, 0.6);
+    line-height: 1;
+  }
+
+  &__title-art {
+    display: block;
+    width: u(990);
+    max-width: 92vw;
+    animation: badge-in 800ms $ease both, glow 3.2s ease-in-out 900ms infinite;
+    filter: drop-shadow(0 0 u(28) rgba(#4dd5bc, 0.5));
+  }
+
+  &__badge {
+    display: inline-block;
+    padding: u(28) u(56);
+    border-radius: u(30);
+    background: #ffe81a;
+    color: #000;
+    font: 700 u(96) / 1 var(--badge-font);
+    letter-spacing: 0.04em;
+    animation: badge-in 800ms $spring both;
+    box-shadow: 0 u(10) 0 rgba(#000, 0.18);
   }
 
   &__label {
-    color: rgba($color-white, 0.7);
+    font-size: u(28);
+    opacity: 0;
+    animation: rise 600ms $ease 500ms both;
   }
 
   &__scores {
-    display: flex;
-    gap: 12px;
+    --s: calc(var(--ps) * 1.4);
+
+    animation: rise 700ms $ease 750ms both;
   }
 
-  &__result {
-    margin-top: 12px;
-    font-size: 1.1rem;
-    color: rgba($color-white, 0.7);
-  }
+  &__kicker {
+    font-size: u(40);
+    line-height: 1;
+    opacity: 0;
+    animation: none;
 
-  &__winner {
-    font-size: 2rem;
-    font-weight: 800;
-  }
-
-  @each $name, $color in $player-colors {
-    &__winner--#{$name} {
-      color: $color;
+    mark {
+      padding: 0 u(10);
+      border-radius: u(8);
+      background: #ffe81a;
+      color: #000;
     }
   }
 
-  &__icon {
-    font-size: 5rem;
+  &[data-phase='result'] &__kicker {
+    animation: rise 600ms $ease 350ms both;
+  }
+
+  &__name {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    font: var(--name-weight) u(var(--name-size)) / 1.15 var(--end-font);
+    letter-spacing: 0.02em;
+    text-transform: var(--name-case);
+    color: var(--name-fixed, var(--player-color));
+
+    span {
+      display: inline-block;
+      opacity: 0;
+    }
+  }
+
+  &[data-theme='gaming'] &__name {
+    text-shadow: 0 0 u(18) var(--player-color), 0 u(6) 0 rgba(#000, 0.35);
+  }
+
+  &[data-phase='result'] &__name span {
+    animation: letter-in 700ms $spring calc(450ms + var(--i) * 55ms) both;
+  }
+
+  &__hero-wrap {
+    position: relative;
+    display: grid;
+    place-items: center;
+    margin: u(6) 0 u(14);
+  }
+
+  // Sanft pulsierendes Leuchten hinter dem Sieger-Symbol
+  &__hero-wrap::before {
+    content: '';
+    position: absolute;
+    inset: u(-90);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(var(--player-glow, 255, 255, 255), 0.22), transparent 62%);
+    animation: glow 3.4s ease-in-out infinite;
+  }
+
+  &[data-theme='da-projects'] &__hero-wrap::before,
+  &[data-theme='foods'] &__hero-wrap::before {
+    display: none;
+  }
+
+  &[data-theme='da-projects'] &__hero-wrap {
+    filter: drop-shadow(u(7) 0 0 #fff) drop-shadow(u(-7) 0 0 #fff) drop-shadow(0 u(7) 0 #fff) drop-shadow(0 u(-7) 0 #fff);
+  }
+
+  &[data-theme='foods'] &__hero-wrap {
+    padding: u(34) u(48);
+    background: #f8e6d6;
+    box-shadow: u(4) u(4) u(12) rgba(#000, 0.25);
+  }
+
+  &__hero {
+    position: relative;
+    display: block;
+    opacity: 0;
+  }
+
+  &[data-phase='result'] &__hero {
+    animation: hero-in 900ms $spring 900ms both, float 4.2s ease-in-out 1.9s infinite;
+  }
+
+  &[data-phase='result'] &__hero--scale {
+    transform-origin: 50% 8%;
+    animation: hero-in 900ms $spring 900ms both, swing 3.6s ease-in-out 1.9s infinite;
+  }
+
+  &__hero--pawn,
+  &__hero--scale {
+    background: var(--player-color);
+    mask: $pawn center / contain no-repeat;
+    -webkit-mask: $pawn center / contain no-repeat;
+    width: u(190);
+    height: u(242);
+  }
+
+  &__hero--scale {
+    mask-image: $scale;
+    -webkit-mask-image: $scale;
+    width: u(300);
+    height: u(240);
+  }
+
+  &__hero--trophy {
+    width: u(250);
+    height: auto;
+    filter: drop-shadow(0 u(18) u(22) rgba(#000, 0.4));
+  }
+
+  &__button {
+    margin-top: u(10);
+    padding: u(14) u(28);
+    border: var(--button-border);
+    border-radius: u(var(--button-radius));
+    background: var(--button-bg);
+    color: var(--button-color);
+    font: 700 u(var(--button-size)) / 1.2 var(--end-font);
+    opacity: 0;
+    transition: transform 250ms $ease, filter 250ms ease;
+
+    &:hover {
+      transform: translateY(-3px) scale(1.06);
+      filter: brightness(1.12);
+    }
+  }
+
+  &[data-theme='foods'] &__button {
+    text-transform: uppercase;
+  }
+
+  &[data-phase='result'] &__button {
+    animation: rise 600ms $ease 1.7s both;
+  }
+
+  @each $theme, $vars in $end-themes {
+    &[data-theme='#{$theme}'] {
+      @each $prop, $value in $vars {
+        #{$prop}: $value;
+      }
+    }
+  }
+
+  // Spielerfarben für Name und Symbol (auf dunklem Grund ggf. heller als in der Game Bar)
+  @each $name in ('blue', 'orange', 'green', 'purple') {
+    [data-player='#{$name}'] {
+      --player-color: var(--hc-#{$name}, var(--pc-#{$name}));
+    }
+  }
+
+  [data-player='draw'] {
+    --player-color: var(--accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 1ms !important;
+    }
   }
 }

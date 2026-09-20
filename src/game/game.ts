@@ -16,6 +16,7 @@ type Scores = Partial<Record<PlayerColor, number>>;
 let content: HTMLElement;
 let cards: Card[] = [];
 let flipped: Card[] = [];
+let seenCards = new Set<number>();
 let isLocked = false;
 let computerPlayer: PlayerColor | null = null;
 let onGameOver: (scores: Scores) => void = () => {};
@@ -34,8 +35,8 @@ export function startGame(
   computerPlayer = getComputerPlayer(settings.playerCount);
   cards = buildDeck(settings.theme, settings.boardSize);
   flipped = [];
+  seenCards = new Set<number>();
   isLocked = false;
-  document.body.dataset.theme = settings.theme;
   renderBoard(settings);
   resetScores(getActivePlayers(settings.playerCount));
 }
@@ -43,8 +44,12 @@ export function startGame(
 /** Rendert Punkteleiste und Spielfeld und bindet die Klick-Listener. */
 function renderBoard(settings: GameSettings): void {
   const players = getActivePlayers(settings.playerCount);
-  content.innerHTML = `<main class="game-screen">${gameBarTemplate(players, computerPlayer)}${boardTemplate(cards, settings.boardSize)}</main>`;
-  content.addEventListener('click', handleBoardClick);
+  const board = boardTemplate(cards, settings.boardSize, settings.theme);
+  content.innerHTML = `
+    <main class="game-screen" data-theme="${settings.theme}">
+      ${gameBarTemplate(players, computerPlayer)}${board}
+    </main>`;
+  content.querySelector('.game-screen')?.addEventListener('click', handleBoardClick as EventListener);
   content.querySelector('#exit-game-btn')?.addEventListener('click', () => showExitPopup(content, onQuit));
 }
 
@@ -65,15 +70,49 @@ function handleBoardClick(event: MouseEvent): void {
   if (flipped.length === 2) checkPair();
 }
 
-/** Waehlt automatisch eine zufaellige, noch verdeckte Karte fuer den Computer. */
-function pickComputerCard(): Card | undefined {
-  const available = cards.filter((card) => !card.isFlipped && !card.isMatched);
-  return available[Math.floor(Math.random() * available.length)];
+/** Sucht zu einer Karte die passende Partnerkarte, die schon einmal aufgedeckt wurde. */
+function findKnownPartner(card: Card): Card | undefined {
+  return cards.find((other) => other.id !== card.id && other.pairId === card.pairId
+    && seenCards.has(other.id) && !other.isMatched);
 }
 
-/** Deckt nacheinander zwei Karten fuer den Computer-Gegner auf. */
+/** Sucht ein Paar, dessen beide Karten dem Computer schon bekannt sind. */
+function findKnownPair(): [Card, Card] | undefined {
+  for (const card of cards.filter((item) => seenCards.has(item.id) && !item.isMatched)) {
+    const partner = findKnownPartner(card);
+    if (partner) return [card, partner];
+  }
+  return undefined;
+}
+
+/** Waehlt eine zufaellige, noch verdeckte Karte (unbekannte Karten werden bevorzugt). */
+function pickRandomCard(exclude: Card[] = []): Card | undefined {
+  const open = cards.filter((card) => !card.isFlipped && !card.isMatched && !exclude.includes(card));
+  const unseen = open.filter((card) => !seenCards.has(card.id));
+  const pool = unseen.length > 0 ? unseen : open;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+/** Waehlt die zweite Karte: den bekannten Partner der ersten, sonst eine zufaellige. */
+function pickNextComputerCard(): Card | undefined {
+  if (flipped.length === 1) return findKnownPartner(flipped[0]) ?? pickRandomCard(flipped);
+  return pickRandomCard();
+}
+
+/** Deckt ein Paar auf, das der Computer sich gemerkt hat. */
+function playKnownPair([first, second]: [Card, Card]): void {
+  revealCard(first, findElement(first));
+  window.setTimeout(() => {
+    revealCard(second, findElement(second));
+    checkPair();
+  }, COMPUTER_MOVE_DELAY_MS);
+}
+
+/** Spielt einen Computer-Zug: erst gemerkte Paare, sonst aufdecken und dazulernen. */
 function playComputerCard(): void {
-  const card = pickComputerCard();
+  const pair = flipped.length === 0 ? findKnownPair() : undefined;
+  if (pair) return playKnownPair(pair);
+  const card = pickNextComputerCard();
   if (!card) return;
   revealCard(card, findElement(card));
   if (flipped.length === 2) checkPair();
@@ -91,6 +130,7 @@ function revealCard(card: Card, element: HTMLElement): void {
   card.isFlipped = true;
   element.classList.add('is-flipped');
   flipped.push(card);
+  seenCards.add(card.id);
   playFlip();
 }
 

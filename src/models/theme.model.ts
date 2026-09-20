@@ -7,6 +7,7 @@ export interface ThemeConfig {
   id: ThemeId;
   label: string;
   icon: string;
+  previewMotif: string;
   motifs: string[];
 }
 
