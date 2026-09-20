@@ -22,7 +22,7 @@ function findLeaders(scores: Scores): PlayerColor[] {
 
 /** Schriftzug "Game over": Original-Grafik bei Code Vibes, sonst gelbes Schild. */
 function titleTemplate(theme: ThemeId): string {
-  const art = '<img class="endscreen__title-art" src="/images/end/game-over.svg" alt="Game over">';
+  const art = '<img class="endscreen__title-art" src="./images/end/game-over.svg" alt="Game over">';
   return theme === 'code-vibes' ? art : '<span class="endscreen__badge">GAME OVER</span>';
 }
 
@@ -52,7 +52,7 @@ function lettersTemplate(text: string): string {
 
 function heroTemplate(theme: ThemeId, winner: PlayerColor | null): string {
   if (!winner) return '<span class="endscreen__hero endscreen__hero--scale" aria-hidden="true"></span>';
-  if (theme === 'gaming') return '<img class="endscreen__hero endscreen__hero--trophy" src="/images/end/trophy.svg" alt="Trophy">';
+  if (theme === 'gaming') return '<img class="endscreen__hero endscreen__hero--trophy" src="./images/end/trophy.svg" alt="Trophy">';
   return '<span class="endscreen__hero endscreen__hero--pawn" aria-hidden="true"></span>';
 }
 

@@ -7,8 +7,8 @@ function cardTemplate(card: Card, theme: ThemeId): string {
   return `
     <button class="card" type="button" data-id="${card.id}">
       <span class="card__inner">
-        <img class="card__face card__face--back" src="${coverUrl(theme)}" alt="">
-        <img class="card__face card__face--front" src="${card.imageUrl}" alt="${card.label}">
+        <img class="card__face card__face--back" src=".${coverUrl(theme)}" alt="">
+        <img class="card__face card__face--front" src=".${card.imageUrl}" alt="${card.label}">
       </span>
     </button>`;
 }

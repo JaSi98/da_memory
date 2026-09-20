@@ -43,7 +43,7 @@ function themeOptions(): Option[] {
 function fieldsetTemplate(icon: string, legend: string, name: string, options: Option[]): string {
   return `
     <fieldset class="settings__section">
-      <legend><img class="settings__icon" src="/images/icons/${icon}.svg" alt="">${legend}</legend>
+      <legend><img class="settings__icon" src="./images/icons/${icon}.svg" alt="">${legend}</legend>
       <ul class="settings__options">${options.map((option) => optionTemplate(name, option)).join('')}</ul>
     </fieldset>`;
 }
@@ -71,8 +71,8 @@ function previewTemplate(themeId: ThemeId): string {
     <div class="settings__stage" id="preview-stage" data-theme="${themeId}">
       ${gameBarTemplate(players, null)}
       <div class="settings__stage-cards">
-        <img class="settings__preview-card" src="${coverUrl(themeId)}" alt="">
-        <img class="settings__preview-card" src="${motifUrl(themeId, motif)}" alt="${motif.replace(/-/g, ' ')}">
+        <img class="settings__preview-card" src=".${coverUrl(themeId)}" alt="">
+        <img class="settings__preview-card" src=".${motifUrl(themeId, motif)}" alt="${motif.replace(/-/g, ' ')}">
       </div>
     </div>`;
 }
