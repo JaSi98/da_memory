@@ -1,0 +1,56 @@
+@use '../abstracts/variables' as *;
+
+.game-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 24px;
+  flex-wrap: wrap;
+
+  &__scores {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  &__score {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: $radius-sm;
+    font-weight: 700;
+    background-color: rgba($color-white, 0.06);
+    transition: background-color $transition-fast, color $transition-fast;
+  }
+
+  &__current {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+  }
+
+  &__dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: $color-blue;
+  }
+
+  @each $name, $color in $player-colors {
+    &__score--#{$name} {
+      color: $color;
+    }
+
+    &[data-active-player='#{$name}'] &__score--#{$name} {
+      background-color: $color;
+      color: $color-bg;
+    }
+
+    &[data-active-player='#{$name}'] &__dot {
+      background-color: $color;
+    }
+  }
+}

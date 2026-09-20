@@ -1,0 +1,39 @@
+@use '../abstracts/variables' as *;
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-6deg); }
+  50% { transform: translateY(-14px) rotate(-6deg); }
+}
+
+.home {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+  padding: 10vh 8vw;
+  overflow: hidden;
+
+  &__intro {
+    font-size: 1.3rem;
+    color: rgba($color-white, 0.7);
+  }
+
+  &__title {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+  }
+
+  &__icon {
+    position: absolute;
+    left: -40px;
+    bottom: -60px;
+    font-size: 18rem;
+    opacity: 0.15;
+    filter: grayscale(1) brightness(1.6);
+    animation: float 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+}

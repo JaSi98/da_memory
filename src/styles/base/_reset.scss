@@ -1,0 +1,44 @@
+@use '../abstracts/variables' as *;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background-color: $color-bg;
+  color: $color-white;
+  font-family: $font-family;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+fieldset {
+  border: none;
+  padding: 0;
+}
+
+legend {
+  padding: 0;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+#content {
+  min-height: 100vh;
+}

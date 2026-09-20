@@ -1,0 +1,59 @@
+@use '../abstracts/variables' as *;
+
+.card {
+  aspect-ratio: 1;
+  perspective: 800px;
+
+  &__inner {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform $transition-flip;
+    transform-style: preserve-3d;
+  }
+
+  &.is-flipped &__inner {
+    transform: rotateY(180deg);
+  }
+
+  &__face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $radius-md;
+    backface-visibility: hidden;
+    font-size: 2rem;
+  }
+
+  &__face--back {
+    background: linear-gradient(135deg, $color-teal, $color-teal-dark);
+    color: rgba($color-white, 0.85);
+
+    @each $theme, $colors in $theme-colors {
+      [data-theme='#{$theme}'] & {
+        background: linear-gradient(135deg, nth($colors, 1), nth($colors, 2));
+      }
+    }
+  }
+
+  &__face--front {
+    background-color: $color-white;
+    transform: rotateY(180deg);
+    padding: 18%;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  @each $name, $color in $player-colors {
+    &.is-matched--#{$name} &__face--front {
+      box-shadow: 0 0 0 4px $color;
+    }
+  }
+}
