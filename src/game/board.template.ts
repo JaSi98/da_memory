@@ -17,7 +17,7 @@ function cardTemplate(card: Card): string {
       <span class="card__inner">
         <span class="card__face card__face--back">${BACK_ICON}</span>
         <span class="card__face card__face--front">
-          <img src="${card.imageUrl}" alt="${card.label}">
+          <img src=".${card.imageUrl}" alt="${card.label}">
         </span>
       </span>
     </button>`;

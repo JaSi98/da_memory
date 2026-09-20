@@ -10,9 +10,19 @@
     font-size: 2.8rem;
     font-weight: 800;
     display: inline-block;
-    border-bottom: 6px solid $color-yellow;
-    padding-bottom: 6px;
+    position: relative;
     margin-bottom: 40px;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: -10px;
+      width: calc(100% + 10px);
+      height: 20px;
+      background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='10' y='7' width='100%25' height='6' fill='%23E9D54D'/%3E%3Cpolygon points='10,0 20,10 10,20 0,10' fill='%23E9D54D'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+    }
   }
 
   &__layout {
@@ -42,6 +52,14 @@
     flex-direction: column;
     gap: 10px;
     list-style: none;
+
+    &:not(:hover) .settings__option input:checked + label {
+      font-weight: bold;
+
+      &::after {
+        display: inline-block;
+      }
+    }
   }
 
   &__option {
@@ -54,6 +72,33 @@
       accent-color: $color-teal-dark;
       width: 18px;
       height: 18px;
+    }
+
+    label {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+
+      &::after {
+        content: '';
+        display: none;
+        width: 60px;
+        height: 20px;
+        margin-left: 15px;
+        vertical-align: middle;
+        transform: translateY(-1px);
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0' y='7' width='50' height='6' fill='%23E9D54D'/%3E%3Cpolygon points='50,0 60,10 50,20 40,10' fill='%23E9D54D'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+    }
+
+    &:hover label {
+      font-weight: bold;
+
+      &::after {
+        display: inline-block;
+      }
     }
   }
 
@@ -72,6 +117,12 @@
     align-items: center;
     justify-content: center;
     gap: 20px;
+
+    @each $theme, $colors in $theme-colors {
+      &[data-theme='#{$theme}'] .settings__preview-card:first-child {
+        background: linear-gradient(135deg, nth($colors, 1), nth($colors, 2));
+      }
+    }
   }
 
   &__preview-card {
@@ -92,14 +143,6 @@
     &:last-child {
       transform: rotate(6deg);
       background: $color-white;
-    }
-  }
-
-  &__stage {
-    @each $theme, $colors in $theme-colors {
-      &[data-theme='#{$theme}'] .settings__preview-card:first-child {
-        background: linear-gradient(135deg, nth($colors, 1), nth($colors, 2));
-      }
     }
   }
 

@@ -49,7 +49,7 @@ var e=(e,t,n)=>()=>{if(n)throw n[0];try{return e&&(t=e(e=0)),t}catch(e){throw n=
       <span class="card__inner">
         <span class="card__face card__face--back">${N}</span>
         <span class="card__face card__face--front">
-          <img src="${e.imageUrl}" alt="${e.label}">
+          <img src=".${e.imageUrl}" alt="${e.label}">
         </span>
       </span>
     </button>`}function Ce(e,t){return`
