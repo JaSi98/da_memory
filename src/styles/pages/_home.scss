@@ -7,17 +7,12 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 .home {
   --s: min(calc(100vw / 1440), calc(100vh / 1024), 1px);
 
-  display: grid;
-  place-items: center;
-  min-height: 100vh;
-  overflow: hidden;
+  position: relative;
+  width: u(1440);
+  height: u(1024);
   background: $color-bg;
-
-  &__stage {
-    position: relative;
-    width: u(1440);
-    height: u(1024);
-  }
+  // Extends the background over the whole window around the centered 1440 frame
+  box-shadow: 0 0 0 100vmax $color-bg;
 
   &__decor {
     position: absolute;

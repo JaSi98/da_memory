@@ -10,20 +10,18 @@ const ARROW = `
  */
 function homeTemplate(): string {
   return `
-    <main class="home">
-      <div class="home__stage">
-        <span class="home__decor" aria-hidden="true"></span>
-        <header class="home__intro">
-          <p class="home__hello">It's play time.</p>
-          <h1 class="home__title">Ready to play?</h1>
-        </header>
-        <button id="play-btn" class="home__play" type="button">
-          <span class="home__play-box"><span class="home__play-icon" aria-hidden="true"></span></span>
-          <span class="home__play-label">Play</span>
-          ${ARROW}
-        </button>
-      </div>
-    </main>`;
+    <section class="home" aria-labelledby="home-title">
+      <span class="home__decor" aria-hidden="true"></span>
+      <hgroup class="home__intro">
+        <p class="home__hello">It's play time.</p>
+        <h1 id="home-title" class="home__title">Ready to play?</h1>
+      </hgroup>
+      <button id="play-btn" class="home__play" type="button">
+        <span class="home__play-box"><span class="home__play-icon" aria-hidden="true"></span></span>
+        <span class="home__play-label">Play</span>
+        ${ARROW}
+      </button>
+    </section>`;
 }
 
 /**

@@ -30,7 +30,7 @@ function showSettings(content: HTMLElement): void {
  * @param settings - Theme, board size and player count chosen by the user.
  */
 function showGame(content: HTMLElement, settings: GameSettings): void {
-  startGame(content, settings, (scores) => showGameOver(content, scores, settings.theme), () => showHome(content));
+  startGame(content, settings, (scores) => showGameOver(content, scores, settings.theme), () => showSettings(content));
 }
 
 /**

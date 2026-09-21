@@ -106,13 +106,14 @@ function previewTemplate(themeId: ThemeId): string {
   const players: PlayerColor[] = ['blue', 'orange'];
 
   return `
-    <div class="settings__stage" id="preview-stage" data-theme="${themeId}">
-      ${gameBarTemplate(players, null)}
-      <div class="settings__stage-cards">
+    <figure class="settings__stage" id="preview-stage" data-theme="${themeId}">
+      <figcaption class="visually-hidden">Preview of the selected theme</figcaption>
+      ${gameBarTemplate(players, null, true)}
+      <span class="settings__stage-cards">
         <img class="settings__preview-card" src=".${coverUrl(themeId)}" alt="">
         <img class="settings__preview-card" src=".${motifUrl(themeId, motif)}" alt="${motif.replace(/-/g, ' ')}">
-      </div>
-    </div>`;
+      </span>
+    </figure>`;
 }
 
 /**
@@ -120,14 +121,14 @@ function previewTemplate(themeId: ThemeId): string {
  * @returns HTML markup of the breadcrumb.
  */
 function breadcrumbTemplate(): string {
-  const crumbs = CRUMBS.map((crumb) => `<span class="settings__crumb" data-crumb="${crumb.name}">${crumb.placeholder}</span>`);
+  const crumbs = CRUMBS.map((crumb) => `<li class="settings__crumb" data-crumb="${crumb.name}">${crumb.placeholder}</li>`);
   return `
-    <div class="settings__breadcrumb">
-      ${crumbs.join('')}
+    <nav class="settings__breadcrumb" aria-label="Your selection">
+      <ol class="settings__crumbs">${crumbs.join('')}</ol>
       <button type="submit" form="settings-form" class="settings__start" disabled>
         <span class="settings__start-icon" aria-hidden="true"></span>Start
       </button>
-    </div>`;
+    </nav>`;
 }
 
 /**
@@ -136,13 +137,11 @@ function breadcrumbTemplate(): string {
  */
 function settingsTemplate(): string {
   return `
-    <main class="settings">
-      <div class="settings__frame">
-        <h1 class="settings__title">Settings</h1>
-        ${formTemplate()}
-        <div class="settings__preview">${previewTemplate(firstTheme())}${breadcrumbTemplate()}</div>
-      </div>
-    </main>`;
+    <section class="settings" aria-labelledby="settings-title">
+      <h1 id="settings-title" class="settings__title">Settings</h1>
+      ${formTemplate()}
+      <aside class="settings__preview" aria-label="Preview and summary">${previewTemplate(firstTheme())}${breadcrumbTemplate()}</aside>
+    </section>`;
 }
 
 /**

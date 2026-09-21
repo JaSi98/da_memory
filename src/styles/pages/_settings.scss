@@ -38,19 +38,14 @@ $stage-themes: (
   --ps: min(calc(100vw / 1440), calc(100vh / 1024), 1px);
   --s: var(--ps);
 
-  display: grid;
-  place-items: center;
-  min-height: 100vh;
-  overflow: hidden;
+  position: relative;
+  width: u(1440);
+  height: u(1024);
   background: $color-white;
+  // Extends the background over the whole window around the centered 1440 frame
+  box-shadow: 0 0 0 100vmax $color-white;
   color: $color-bg;
   font-family: 'Almarai', sans-serif;
-
-  &__frame {
-    position: relative;
-    width: u(1440);
-    height: u(1024);
-  }
 
   &__title {
     position: absolute;
@@ -239,6 +234,13 @@ $stage-themes: (
       margin-left: calc(-28 * var(--ps));
       transform: rotate(12deg) translateY(12px);
     }
+  }
+
+  &__crumbs {
+    display: flex;
+    align-items: center;
+    gap: u(16);
+    list-style: none;
   }
 
   &__breadcrumb {
