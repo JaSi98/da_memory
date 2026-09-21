@@ -12,6 +12,8 @@ import { playFlip, playMatch, playMismatch } from '../services/sound.service';
 const FLIP_BACK_DELAY_MS = 800;
 /** Pause between the steps of a computer turn, in milliseconds. */
 const COMPUTER_MOVE_DELAY_MS = 700;
+/** Pause after the last pair is found, so the flip animation and the pair can be seen, in milliseconds. */
+const GAME_END_DELAY_MS = 1300;
 
 /** Final or current score per player color. */
 type Scores = Partial<Record<PlayerColor, number>>;
@@ -233,20 +235,24 @@ function hidePair(first: Card, second: Card): void {
 }
 
 /**
- * Ends the turn, checks for the end of the game and triggers the computer if needed.
+ * Ends the turn, triggers the computer if needed, or ends the game after a short pause when all pairs are found. The board stays locked during that pause.
  * @param wasMatch - True if the turn found a pair; the same player then continues.
  */
 function endTurn(wasMatch: boolean): void {
   flipped = [];
+  if (cards.every((card) => card.isMatched)) {
+    window.setTimeout(finishGame, GAME_END_DELAY_MS);
+    return;
+  }
   isLocked = false;
   if (!wasMatch) switchPlayer();
-  if (cards.every((card) => card.isMatched)) return finishGame();
   maybeTakeComputerTurn();
 }
 
 /**
- * Ends the game and reports the result to the caller.
+ * Ends the game and reports the result to the caller. Does nothing if the player already left the game.
  */
 function finishGame(): void {
+  if (!content.querySelector('.game-screen')) return;
   onGameOver(getScores());
 }
