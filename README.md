@@ -1,158 +1,158 @@
 # Memory
 
-Ein Memory-Kartenspiel fuer den Browser, entstanden als Projekt der Developer Akademie.
-Es ist komplett in TypeScript und SCSS geschrieben (Vite als Build-Tool, keine Frameworks) und setzt das Figma-Design mit vier Themes um.
+A memory card game for the browser, built as a project of the Developer Akademie.
+It is written entirely in TypeScript and SCSS (Vite as build tool, no frameworks) and implements the Figma design with four themes.
 
 Repository: https://github.com/JaSi98/da_memory
 
-## Inhalt
+## Contents
 
-- [Funktionen](#funktionen)
+- [Features](#features)
 - [Extras](#extras)
-- [Spielablauf](#spielablauf)
-- [Installation und Start](#installation-und-start)
-- [Projektstruktur](#projektstruktur)
-- [Technische Umsetzung](#technische-umsetzung)
-- [Ein neues Theme hinzufuegen](#ein-neues-theme-hinzufuegen)
-- [Coding-Konventionen](#coding-konventionen)
-- [Hinweise und Einschraenkungen](#hinweise-und-einschraenkungen)
+- [How to play](#how-to-play)
+- [Installation and start](#installation-and-start)
+- [Project structure](#project-structure)
+- [Technical overview](#technical-overview)
+- [Adding a new theme](#adding-a-new-theme)
+- [Coding conventions](#coding-conventions)
+- [Notes and limitations](#notes-and-limitations)
 
-## Funktionen
+## Features
 
-Die Umsetzung folgt den User Stories der Checkliste.
+The implementation follows the user stories of the project checklist.
 
-**Startseite**
-- Startseite nach Figma-Vorgabe mit dem Play-Button, der zu den Settings fuehrt.
-- Der Controller im Button waechst beim Hover und dreht sich, der Pfeil wird dicker.
-- Grosser Controller als dezente Dekoration im Hintergrund.
+**Home screen**
+- Home screen as specified in Figma, with a play button that leads to the settings.
+- On hover, the controller inside the button grows and rotates, and the arrow gets thicker.
+- A large controller as a subtle decoration in the background.
 
 **Settings**
-- Auswahl von Spielthema, Spieleranzahl (1 bis 4) und Spielfeldgroesse (16, 24 oder 36 Karten, also 4x4, 4x6 und 6x6).
-- Pro Gruppe ist genau eine Option waehlbar. Der gelbe Marker wird beim Hover und bei der Auswahl eingeblendet.
-- Live-Vorschau mit Game Bar und zwei Beispielkarten, die sich mit dem gewaehlten Theme aendert.
-- Der Breadcrumb zeigt die getroffene Auswahl. Der Start-Button ist erst aktiv, wenn alle drei Einstellungen gewaehlt sind.
+- Choice of theme, number of players (1 to 4) and board size (16, 24 or 36 cards, which means 4x4, 4x6 and 6x6).
+- Exactly one option can be selected per group. The yellow marker slides in on hover and on selection.
+- Live preview with game bar and two sample cards that changes with the selected theme.
+- The breadcrumb shows the current choices. The start button becomes active once all three settings are chosen.
 
 **Themes**
-- Vier Themes: Code vibes, Gaming, DA Projects und Foods.
-- Jedes Theme hat 18 eigene Motive, ein eigenes Kartenrueckseiten-Design, eine eigene Schrift und eine eigene Game Bar.
-- Das Theme veraendert Farbschema und Motive des gesamten Spiels, auch den End-Screen.
+- Four themes: Code vibes, Gaming, DA Projects and Foods.
+- Every theme has 18 motifs of its own, its own card back design, its own typeface and its own game bar.
+- The theme changes the color scheme and the motifs of the whole game, including the end screen.
 
-**Spielfeld**
-- Das Spielfeld entspricht der gewaehlten Groesse.
-- Ueber dem Spielfeld stehen die Punktestaende, der aktuelle Spieler und der Button "Exit game" mit Sicherheitsabfrage.
-- Karten drehen sich per 3D-Animation um.
-- Gefundene Paare werden in der Farbe des Spielers markiert, der sie gefunden hat.
+**Board**
+- The board matches the selected size.
+- Above the board are the scores, the current player and an "Exit game" button with a confirmation dialog.
+- Cards flip with a 3D animation.
+- Found pairs are highlighted in the color of the player who found them.
 
-**Ende der Runde**
-- Ein "Game over"-Bild mit hochzaehlendem Endstand, danach das Ergebnis mit Gewinner oder Unentschieden.
-- Bei einem Sieg gibt es Konfetti-Kanonen, Konfettiregen und Feuerwerk passend zum Theme.
-- Ueber "Back to start" bzw. "Home" geht es zurueck zur Startseite und eine neue Runde kann beginnen.
+**End of a round**
+- A "Game over" view with counting final scores, followed by the result with the winner or a draw.
+- A win comes with confetti cannons, falling confetti and fireworks that match the theme.
+- "Back to start" or "Home" returns to the home screen so a new round can begin.
 
 ## Extras
 
-- **Bis zu vier Spieler.** Bei einem Spieler spielt man gegen den Computer.
-- **Computer-Gegner mit Gedaechtnis.** Er merkt sich jede aufgedeckte Karte, spielt bekannte Paare direkt und deckt sonst bevorzugt unbekannte Karten auf.
-- **Soundeffekte** fuer Aufdecken, Treffer, Fehlversuch, Sieg, Unentschieden und Feuerwerk. Sie werden mit der Web Audio API erzeugt, es werden keine Audio-Dateien geladen.
-- **Themenbasierte End-Screens** mit eigenen Animationen. Beim Unentschieden pendelt eine Waage, es gibt bewusst kein Feuerwerk.
-- **Skalierung nach dem Figma-Frame (1440 x 1024).** Alle Groessen werden relativ zu diesem Frame berechnet. Dadurch passen auch 36 Karten ohne Scrollbalken auf den Bildschirm. Ab 1440 Pixel Breite bleibt der Inhalt zentriert und der Hintergrund fuellt die ganze Breite.
-- **Reduzierte Bewegung.** Bei aktivierter Systemeinstellung "prefers-reduced-motion" laufen die Animationen des End-Screens nur minimal und das Feuerwerk entfaellt.
+- **Up to four players.** With one player you play against the computer.
+- **Computer opponent with memory.** It remembers every revealed card, plays known pairs directly and otherwise prefers cards it has not seen yet.
+- **Sound effects** for flipping, matching, missing, winning, drawing and fireworks. They are synthesized with the Web Audio API, no audio files are loaded.
+- **Theme based end screens** with their own animations. On a draw a scale swings back and forth, and there are deliberately no fireworks.
+- **Scaling based on the Figma frame (1440 x 1024).** All sizes are calculated relative to this frame, so even 36 cards fit on screen without a scrollbar. From 1440 pixels width on, the content stays centered and the background fills the whole width.
+- **Reduced motion.** With the system setting "prefers-reduced-motion" enabled, the animations of the end screen run only minimally and the fireworks are skipped.
 
-## Spielablauf
+## How to play
 
-1. Auf der Startseite "Play" klicken.
-2. In den Settings Thema, Spieleranzahl und Spielfeldgroesse waehlen und "Start" klicken.
-3. Der erste Spieler ist immer Blau. Ein Klick deckt eine Karte auf, ein zweiter Klick die zweite Karte.
-4. Passen beide Karten zusammen, bekommt der Spieler einen Punkt und darf noch einmal. Passen sie nicht zusammen, werden sie wieder umgedreht und der naechste Spieler ist dran.
-5. Sind alle Paare gefunden, endet die Runde. Wer die meisten Punkte hat, gewinnt. Bei Gleichstand gibt es ein Unentschieden.
+1. Click "Play" on the home screen.
+2. Choose theme, number of players and board size in the settings and click "Start".
+3. The first player is always Blue. One click reveals a card, a second click reveals the second card.
+4. If both cards match, the player scores a point and goes again. If they do not match, they are turned back over and the next player is up.
+5. When all pairs are found, the round ends. The player with the most points wins. Equal scores result in a draw.
 
-Mit einem Spieler ist Orange der Computer. Er zieht automatisch, sobald er an der Reihe ist.
+With one player, Orange is the computer. It moves automatically when it is its turn.
 
-## Installation und Start
+## Installation and start
 
-Voraussetzung ist eine aktuelle Node.js-Version (LTS) mit npm.
+A current Node.js version (LTS) with npm is required.
 
 ```bash
-# Abhaengigkeiten installieren
+# Install dependencies
 npm install
 
-# Entwicklungsserver starten (Standard: http://localhost:5173)
+# Start the development server (default: http://localhost:5173)
 npm run dev
 
-# Typpruefung und Produktions-Build nach dist/
+# Type check and production build into dist/
 npm run build
 
-# Gebauten Stand lokal ansehen
+# Preview the built version locally
 npm run preview
 ```
 
-Der Build verwendet `--base=./`. Die App laesst sich dadurch auch in einem Unterordner hosten, zum Beispiel auf GitHub Pages.
+The build uses `--base=./`, so the app can also be hosted in a subfolder, for example on GitHub Pages.
 
-## Projektstruktur
+## Project structure
 
 ```
-index.html                  Einstiegsseite (Container #content, Schriften, Favicon)
+index.html                  Entry page (container #content, fonts, favicon)
 public/
   favicon.svg
   images/
-    code-vibes/ gaming/     Pro Theme: cover.svg und 18 Motive (SVG)
+    code-vibes/ gaming/     Per theme: cover.svg and 18 motifs (SVG)
     da-projects/ foods/
-    icons/                  UI-Icons (Controller, Pawn, Label, Exit, ...)
-    end/                    Grafiken der End-Screens (Titel, Pokal, Waage, Konfetti)
+    icons/                  UI icons (controller, pawn, label, exit, ...)
+    end/                    End screen graphics (title, trophy, scale, confetti)
 src/
-  main.ts                   Einstieg und Ablauf der Screens
-  models/                   Datentypen (Card, Theme, Einstellungen)
-  config/                   Themes, Spielerfarben, Bildpfade
-  services/                 Kartenmischen, Sound, Konfetti und Feuerwerk
-  game/                     Spiellogik, Punktestand, Templates fuer Board und Game Bar
-  screens/                  Home, Settings, Exit-Popup und End-Screen
-  styles/                   SCSS im 7-1-Muster
-    abstracts/              Variablen und Hilfsfunktion u()
-    base/                   Reset und Grundstile
-    components/             Buttons, Karten, Board, Game Bar, Popup
-    pages/                  Home, Settings, Spiel, End-Screen
+  main.ts                   Entry point and flow between the screens
+  models/                   Data types (card, theme, settings)
+  config/                   Themes, player colors, image paths
+  services/                 Deck shuffling, sound, confetti and fireworks
+  game/                     Game logic, scores, templates for board and game bar
+  screens/                  Home, settings, exit popup and end screen
+  styles/                   SCSS in the 7-1 pattern
+    abstracts/              Variables and the helper function u()
+    base/                   Reset and base styles
+    components/             Buttons, cards, board, game bar, popup
+    pages/                  Home, settings, game, end screen
 ```
 
-## Technische Umsetzung
+## Technical overview
 
-**Single Page App ohne Framework.** `main.ts` steuert den Ablauf Home, Settings, Spiel und End-Screen. Jeder Screen rendert per Template-Funktion in den Container `#content`. Der Wechsel geschieht ueber Callbacks, die Seite wird nie neu geladen.
+**Single page app without a framework.** `main.ts` controls the flow home, settings, game and end screen. Every screen renders through a template function into the container `#content`. Screens are switched with callbacks and the page is never reloaded.
 
-**Trennung von Logik und Darstellung.**
-- `game.ts` enthaelt Zustand und Regeln (Aufdecken, Paarpruefung, Zugwechsel, Computer-Zug).
-- `score.ts` verwaltet Punkte und den aktiven Spieler.
-- Die HTML-Templates liegen in eigenen Funktionen und Dateien, die Optik steckt komplett in SCSS.
+**Separation of logic and presentation.**
+- `game.ts` holds state and rules (revealing, pair check, turn change, computer turn).
+- `score.ts` manages the points and the active player.
+- The HTML templates live in their own functions and files, and the look is defined entirely in SCSS.
 
-**Theme-System.** Das aktive Theme steht als Attribut `data-theme` am Root-Element eines Screens. SCSS-Maps pro Theme werden per `@each` in CSS-Variablen ausgegeben (Farben, Schriften, Kartenmasse, Game-Bar-Aussehen). So gibt es pro Screen nur ein Markup, das Aussehen entscheidet das Theme.
+**Theme system.** The active theme is set as the attribute `data-theme` on the root element of a screen. SCSS maps per theme are written out as CSS variables with `@each` (colors, typefaces, card dimensions, game bar look). This way every screen has a single markup and the theme decides how it looks.
 
-**Skalierung.** Jeder Screen setzt `--s` als Verhaeltnis von Fenster zu Figma-Frame. Die SCSS-Funktion `u(24)` rechnet Figma-Pixel in `calc(24 * var(--s))` um. Alle Masse aus dem Design koennen dadurch unveraendert uebernommen werden.
+**Scaling.** Every screen sets `--s` as the ratio of the window to the Figma frame. The SCSS function `u(24)` converts Figma pixels into `calc(24 * var(--s))`. All measurements from the design can therefore be used unchanged.
 
-**Computer-Gegner.** Alle aufgedeckten Karten landen in einer Merkliste. Zu Beginn eines Zuges sucht der Computer darin ein vollstaendig bekanntes Paar. Gibt es keines, deckt er eine Karte auf und nimmt fuer die zweite Karte den bekannten Partner, falls vorhanden.
+**Computer opponent.** All revealed cards are stored in a memory list. At the start of a turn the computer looks for a fully known pair in that list. If there is none, it reveals a card and uses the known partner for the second card, if one exists.
 
-**Effekte.** Das Feuerwerk und die Konfetti-Kanonen sind ein Partikelsystem auf einem Canvas (`effects.service.ts`). Jedes Theme bringt eigene Farben und Formen mit, zum Beispiel Code-Symbole bei Code vibes oder Essens-Sticker bei Foods.
+**Effects.** The fireworks and confetti cannons are a particle system on a canvas (`effects.service.ts`). Each theme brings its own colors and shapes, for example code symbols for Code vibes or food stickers for Foods.
 
-**Schriften** werden von Google Fonts geladen: Red Rose, Orbitron, Figtree, Klee One, Delius Unicase, Almarai und Poppins.
+**Typefaces** are loaded from Google Fonts: Red Rose, Orbitron, Figtree, Klee One, Delius Unicase, Almarai and Poppins.
 
-## Ein neues Theme hinzufuegen
+## Adding a new theme
 
-1. Ordner `public/images/<theme-id>/` anlegen mit `cover.svg` und den Motiven als SVG-Dateien.
-2. In `src/models/theme.model.ts` die neue Id zum Typ `ThemeId` hinzufuegen.
-3. In `src/config/theme.config.ts` das Theme mit Label, Vorschau-Motiv und den Dateinamen der Motive eintragen. Fuer die groesste Spielfeldgroesse werden 18 Motive gebraucht.
-4. In den SCSS-Maps eine Zeile fuer das Theme ergaenzen: `$bar-themes` (Game Bar), `$game-themes` (Karten und Seitenfarbe), `$stage-themes` (Settings-Vorschau) und `$end-themes` (End-Screen).
-5. Optional in `effects.service.ts` Farben und Formen fuer das Feuerwerk eintragen.
+1. Create the folder `public/images/<theme-id>/` with `cover.svg` and the motifs as SVG files.
+2. Add the new id to the type `ThemeId` in `src/models/theme.model.ts`.
+3. Register the theme in `src/config/theme.config.ts` with label, preview motif and the file names of the motifs. The largest board size needs 18 motifs.
+4. Add one entry for the theme to each SCSS map: `$bar-themes` (game bar), `$game-themes` (cards and page color), `$stage-themes` (settings preview) and `$end-themes` (end screen).
+5. Optionally add colors and shapes for the fireworks in `effects.service.ts`.
 
-## Coding-Konventionen
+## Coding conventions
 
-Der Code folgt den Guidelines der Developer Akademie (Ordner `Guidelines`):
+The code follows the guidelines of the Developer Akademie (folder `Guidelines`):
 
-- Dateinamen in kebab-case, Funktionen und Variablen in camelCase, Klassen und Typen in PascalCase, Konstanten in UPPER_CASE.
-- Maximal 14 Zeilen pro Funktion, eine Aufgabe pro Funktion.
-- Typen und Rueckgabewerte werden explizit angegeben, kein `any`.
-- HTML steht in Template-Funktionen und nicht verstreut im Code, es werden semantische Tags verwendet (`main`, `header`, `section`, `form`, `fieldset`, `button`).
-- Bilder haben sinnvolle `alt`-Texte, dekorative Elemente sind mit `aria-hidden` markiert.
-- SCSS im 7-1-Muster mit Partials, `@use`, Nesting, BEM-Namen sowie Maps und `@each` fuer Themes.
+- File names in kebab-case, functions and variables in camelCase, classes and types in PascalCase, constants in UPPER_CASE.
+- At most 14 lines per function, one task per function.
+- Types and return values are stated explicitly, no `any`.
+- HTML lives in template functions instead of being scattered through the code, and semantic tags are used (`main`, `header`, `section`, `form`, `fieldset`, `button`).
+- Images have meaningful `alt` texts, decorative elements are marked with `aria-hidden`.
+- SCSS in the 7-1 pattern with partials, `@use`, nesting, BEM names, and maps with `@each` for themes.
 
-## Hinweise und Einschraenkungen
+## Notes and limitations
 
-- Fuer die Schriften wird eine Internetverbindung gebraucht. Ohne Verbindung greifen die Ersatzschriften.
-- Browser starten Audio erst nach einer Benutzeraktion. Die Sounds setzen daher mit dem ersten Klick ein.
-- Das Layout ist fuer Desktop-Bildschirme ausgelegt. Auf sehr kleinen Bildschirmen wird alles proportional verkleinert.
-- Alle Motive, Cover und Icons stammen aus dem Figma-Design des Projekts und wurden von dort als SVG exportiert.
+- An internet connection is needed for the typefaces. Without it, fallback fonts are used.
+- Browsers only start audio after a user action, so the sounds begin with the first click.
+- The layout is designed for desktop screens. On very small screens everything is scaled down proportionally.
+- All motifs, covers and icons come from the Figma design of the project and were exported from there as SVG.
