@@ -29,7 +29,7 @@ The implementation follows the user stories of the project checklist.
 **Settings**
 - Choice of theme, number of players (1 to 4) and board size (16, 24 or 36 cards, which means 4x4, 4x6 and 6x6).
 - Exactly one option can be selected per group. The yellow marker slides in on hover and on selection.
-- Live preview with game bar and two sample cards that changes with the selected theme.
+- Live preview with game bar and two sample cards. It shows the theme under the mouse while hovering and falls back to the selected theme otherwise.
 - The breadcrumb shows the current choices. The start button becomes active once all three settings are chosen.
 
 **Themes**

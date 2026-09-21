@@ -107,7 +107,7 @@ function previewTemplate(themeId: ThemeId): string {
 
   return `
     <figure class="settings__stage" id="preview-stage" data-theme="${themeId}">
-      <figcaption class="visually-hidden">Preview of the selected theme</figcaption>
+      <figcaption class="visually-hidden">Preview of the theme</figcaption>
       ${gameBarTemplate(players, null, true)}
       <span class="settings__stage-cards">
         <img class="settings__preview-card" src=".${coverUrl(themeId)}" alt="">
@@ -159,13 +159,43 @@ function updateBreadcrumb(root: HTMLElement, form: HTMLFormElement): void {
 }
 
 /**
+ * Shows the preview of a theme. Nothing is replaced if that theme is already shown.
+ * @param root - Element containing the settings screen.
+ * @param theme - Theme to show in the preview.
+ */
+function showPreview(root: HTMLElement, theme: ThemeId): void {
+  const stage = root.querySelector<HTMLElement>('#preview-stage')!;
+  if (stage.dataset.theme !== theme) stage.outerHTML = previewTemplate(theme);
+}
+
+/**
+ * Reads the selected theme of the form.
+ * @param form - Settings form to read the choice from.
+ * @returns The selected theme, or the default theme if none is selected yet.
+ */
+function selectedTheme(form: HTMLFormElement): ThemeId {
+  return (new FormData(form).get('theme') as ThemeId | null) ?? firstTheme();
+}
+
+/**
+ * Shows the theme under the mouse in the preview. Hovering any other option shows the selected theme again.
+ * @param root - Element containing the settings screen.
+ * @param form - Settings form to read the choices from.
+ * @param event - Mouseover event of the form.
+ */
+function previewHover(root: HTMLElement, form: HTMLFormElement, event: MouseEvent): void {
+  const input = (event.target as HTMLElement).closest('.settings__option')?.querySelector('input');
+  const isTheme = input?.name === 'theme';
+  showPreview(root, isTheme ? (input!.value as ThemeId) : selectedTheme(form));
+}
+
+/**
  * Applies the current choices to preview, breadcrumb and start button. The start button is enabled once everything is chosen.
  * @param root - Element containing the settings screen.
  * @param form - Settings form to read the choices from.
  */
 function syncSelection(root: HTMLElement, form: HTMLFormElement): void {
-  const theme = new FormData(form).get('theme') as ThemeId | null;
-  if (theme) root.querySelector('#preview-stage')!.outerHTML = previewTemplate(theme);
+  showPreview(root, selectedTheme(form));
   updateBreadcrumb(root, form);
   root.querySelector<HTMLButtonElement>('.settings__start')!.disabled = !form.checkValidity();
 }
@@ -193,6 +223,8 @@ export function renderSettingsScreen(content: HTMLElement, onStart: (settings: G
   content.innerHTML = settingsTemplate();
   const form = content.querySelector('#settings-form') as HTMLFormElement;
   form.addEventListener('change', () => syncSelection(content, form));
+  form.addEventListener('mouseover', (event) => previewHover(content, form, event));
+  form.addEventListener('mouseleave', () => showPreview(content, selectedTheme(form)));
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     if (form.checkValidity()) onStart(readSettings(form));
