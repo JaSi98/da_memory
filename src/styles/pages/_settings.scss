@@ -182,7 +182,7 @@ $stage-themes: (
     display: flex;
     flex-direction: column;
     gap: u(44);
-    width: u(546);
+    width: u(580);
   }
 
   &__stage {
@@ -239,7 +239,7 @@ $stage-themes: (
   &__crumbs {
     display: flex;
     align-items: center;
-    gap: u(16);
+    gap: u(12);
     list-style: none;
   }
 
@@ -254,11 +254,26 @@ $stage-themes: (
   }
 
   // Slanted dividers; chosen values get a diamond at the bottom.
+  // Every crumb has a fixed width (longest value of its group), so the dividers never move.
   &__crumb {
     display: inline-flex;
+    flex: none;
     align-items: center;
-    gap: u(16);
+    justify-content: space-between;
+    gap: u(12);
     white-space: nowrap;
+
+    &[data-crumb='theme'] {
+      width: u(136);
+    }
+
+    &[data-crumb='playerCount'] {
+      width: u(104);
+    }
+
+    &[data-crumb='boardSize'] {
+      width: u(92);
+    }
 
     &:not(:last-of-type)::after {
       content: '';
