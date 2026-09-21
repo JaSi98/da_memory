@@ -91,7 +91,7 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
     transition: width 300ms $ease, stroke-width 300ms $ease;
   }
 
-  // Hover-Variante aus Figma: Controller waechst und dreht sich, der Pfeil wird kraeftiger.
+  // Hover variant from Figma: the controller grows and rotates, the arrow gets thicker.
   &__play:hover &__play-box {
     width: u(60.2);
     height: u(53.9);

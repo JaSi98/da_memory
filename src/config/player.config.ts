@@ -1,7 +1,9 @@
 import type { PlayerColor, PlayerCount } from '../models/theme.model';
 
+/** All player colors in turn order. */
 export const PLAYER_COLORS: PlayerColor[] = ['blue', 'orange', 'green', 'purple'];
 
+/** Display names of the player colors. */
 export const PLAYER_LABELS: Record<PlayerColor, string> = {
   blue: 'Blue',
   orange: 'Orange',

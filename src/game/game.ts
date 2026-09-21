@@ -8,21 +8,38 @@ import type { GameSettings, PlayerColor } from '../models/theme.model';
 import { addPoint, switchPlayer, getScores, resetScores, getActivePlayer } from './score';
 import { playFlip, playMatch, playMismatch } from '../services/sound.service';
 
+/** How long a wrong pair stays visible before it is turned back, in milliseconds. */
 const FLIP_BACK_DELAY_MS = 800;
+/** Pause between the steps of a computer turn, in milliseconds. */
 const COMPUTER_MOVE_DELAY_MS = 700;
 
+/** Final or current score per player color. */
 type Scores = Partial<Record<PlayerColor, number>>;
 
+/** Container element that holds the game screen. */
 let content: HTMLElement;
+/** All cards of the current board. */
 let cards: Card[] = [];
+/** Cards revealed in the current turn (zero, one or two). */
 let flipped: Card[] = [];
+/** Ids of all cards that were revealed at least once; this is the memory of the computer. */
 let seenCards = new Set<number>();
+/** True while a turn is being resolved, so no further card can be picked. */
 let isLocked = false;
+/** Color controlled by the computer, or null in a game without computer. */
 let computerPlayer: PlayerColor | null = null;
+/** Called with the final scores when the game ends. */
 let onGameOver: (scores: Scores) => void = () => {};
+/** Called when the user confirms leaving the game. */
 let onQuit: () => void = () => {};
 
-/** Baut das Spielfeld in den Content-Bereich und haengt die Listener an. */
+/**
+ * Builds the board into the content container and attaches the listeners.
+ * @param target - Container element that receives the board.
+ * @param settings - Theme, board size and player count.
+ * @param onFinish - Called with the final scores when all pairs are found.
+ * @param onExit - Called when the user leaves the game.
+ */
 export function startGame(
   target: HTMLElement,
   settings: GameSettings,

@@ -6,7 +6,7 @@ $marker-color: #e9d54d;
 $marker: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 20' preserveAspectRatio='none'%3E%3Crect x='0' y='7' width='50' height='6' fill='%23E9D54D'/%3E%3Cpolygon points='50,0 60,10 50,20 40,10' fill='%23E9D54D'/%3E%3C/svg%3E");
 $start-icon: url('/images/icons/smart-display.svg');
 
-// Buehne der Live-Vorschau je Theme (Farben/Kartenmasse aus den Figma-Mockups).
+// Stage of the live preview per theme (colors and card dimensions from the Figma mockups).
 $stage-themes: (
   'code-vibes': (
     '--stage-bg': linear-gradient(to top right, #5a5b5b, #2e2f2f 62%),
@@ -58,7 +58,7 @@ $stage-themes: (
     top: u(113);
     font: 700 u(54) / u(67) 'Red Rose', sans-serif;
 
-    // Gelbe Linie mit Raute unter der Ueberschrift
+    // Yellow line with a diamond below the heading
     &::before,
     &::after {
       content: '';
@@ -146,7 +146,7 @@ $stage-themes: (
       align-items: center;
       cursor: pointer;
 
-      // Gelber Marker: wird beim Hover/Auswaehlen von links eingeblendet
+      // Yellow marker: slides in from the left on hover and on selection
       &::after {
         content: '';
         width: u(50);
@@ -170,7 +170,7 @@ $stage-themes: (
     }
   }
 
-  // Nur die gewaehlte Option zeigt den Marker, solange keine andere ueberfahren wird.
+  // Only the selected option shows the marker as long as no other option is hovered.
   &__options:not(:hover) &__option input:checked + label {
     font-weight: 700;
 
@@ -191,7 +191,7 @@ $stage-themes: (
   }
 
   &__stage {
-    // Game Bar der Vorschau ist verkleinert (Bar: 474 von 1219 Figma-Pixeln).
+    // The game bar of the preview is scaled down (bar: 474 of 1219 Figma pixels).
     --s: calc(var(--ps) * 0.389);
 
     display: flex;
@@ -251,7 +251,7 @@ $stage-themes: (
     font: 400 u(20) / u(22) 'Almarai', sans-serif;
   }
 
-  // Schraege Trennstriche; gewaehlte Werte bekommen eine Raute am Fuss.
+  // Slanted dividers; chosen values get a diamond at the bottom.
   &__crumb {
     display: inline-flex;
     align-items: center;

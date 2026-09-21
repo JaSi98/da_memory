@@ -1,6 +1,7 @@
 import type { PlayerColor } from '../models/theme.model';
 import { PLAYER_LABELS } from '../config/player.config';
 
+/** Small tag that marks the score of the computer player. */
 const BOT_BADGE = '<span class="game-bar__bot" role="img" aria-label="Computer">CPU</span>';
 
 /**

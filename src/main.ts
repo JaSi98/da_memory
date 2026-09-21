@@ -5,6 +5,7 @@ import { renderGameOverScreen } from './screens/gameover.screen';
 import { startGame } from './game/game';
 import type { GameSettings, PlayerColor, ThemeId } from './models/theme.model';
 
+/** Final or current score per player color. */
 type Scores = Partial<Record<PlayerColor, number>>;
 
 /**

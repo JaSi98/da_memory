@@ -1,3 +1,4 @@
+/** Markup of the arrow inside the play button. */
 const ARROW = `
   <svg class="home__arrow" viewBox="0 0 33 16" fill="none" stroke="currentColor" aria-hidden="true">
     <path d="M0 8H31M24 1L31 8L24 15"></path>

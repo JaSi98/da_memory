@@ -1,6 +1,6 @@
 @use '../abstracts/functions' as *;
 
-// Masse der Karten und Seitenfarbe je Theme (Figma-Frames, Pixel im 1440er Raster).
+// Card dimensions and page color per theme (Figma frames, pixels in the 1440 grid).
 $game-themes: (
   'code-vibes': (
     '--page-bg': #303131,

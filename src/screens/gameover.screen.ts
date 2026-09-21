@@ -3,9 +3,12 @@ import { PLAYER_LABELS } from '../config/player.config';
 import { celebrate, stopEffects } from '../services/effects.service';
 import { playWin, playDraw } from '../services/sound.service';
 
+/** Final or current score per player color. */
 type Scores = Partial<Record<PlayerColor, number>>;
 
+/** How long the game over panel is shown before the result appears, in milliseconds. */
 const RESULT_DELAY_MS = 1700;
+/** Label of the button that leaves the end screen, per theme. */
 const RESTART_LABELS: Record<ThemeId, string> = {
   'code-vibes': 'Back to start',
   gaming: 'Home',

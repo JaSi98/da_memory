@@ -1,29 +1,53 @@
 import type { ThemeId } from '../models/theme.model';
 import { playPop } from './sound.service';
 
+/**
+ * A single particle of a firework or of the confetti.
+ */
 interface Particle {
+  /** Horizontal position in pixels. */
   x: number;
+  /** Vertical position in pixels. */
   y: number;
+  /** Horizontal speed in pixels per frame. */
   vx: number;
+  /** Vertical speed in pixels per frame. */
   vy: number;
+  /** Radius of a spark or edge length of a confetti piece. */
   size: number;
+  /** Remaining life from 1 (new) to 0 (gone); it also controls the opacity. */
   life: number;
+  /** How much life is lost per frame. */
   decay: number;
+  /** Downward acceleration per frame. */
   gravity: number;
+  /** CSS color of the particle. */
   color: string;
+  /** Current rotation in radians. */
   rotation: number;
+  /** Rotation speed in radians per frame; 0 marks a spark. */
   spin: number;
+  /** Optional text glyph that is drawn instead of a rectangle. */
   glyph?: string;
+  /** Optional sticker image that is drawn instead of a rectangle. */
   image?: HTMLImageElement;
 }
 
+/**
+ * Look of the celebration effects of one theme.
+ */
 interface EffectTheme {
+  /** CSS colors used for sparks and confetti. */
   colors: string[];
+  /** Plain text glyphs that are mixed into the confetti. */
   glyphs: string[];
+  /** File names of motifs that are mixed into the confetti as stickers. */
   sprites: string[];
+  /** True if particles are blended additively, which suits dark backgrounds. */
   glow: boolean;
 }
 
+/** Colors, glyphs and stickers of the celebration effects per theme. */
 const EFFECT_THEMES: Record<ThemeId, EffectTheme> = {
   'code-vibes': { colors: ['#4dd5bc', '#f0ea6e', '#2bb1ff', '#f58e39', '#ffffff'], glyphs: ['</>', '{ }', '=>', '&&', ';'], sprites: [], glow: true },
   gaming: { colors: ['#ed1b76', '#f0ea6e', '#1faafc', '#7cff6b', '#ffffff'], glyphs: ['*', '+', '#', 'o'], sprites: [], glow: true },
@@ -31,16 +55,35 @@ const EFFECT_THEMES: Record<ThemeId, EffectTheme> = {
   foods: { colors: ['#f3832d', '#a45212', '#ed1b76', '#f0ea6e', '#5fbf7a'], glyphs: [], sprites: ['fries', 'pizza', 'donut', 'ice-cream', 'cupcake', 'taco', 'burger', 'sushi', 'macarons'], glow: false },
 };
 
+/** Downward acceleration of a particle per frame. */
 const GRAVITY = 0.16;
+/** Time between two firework explosions in milliseconds. */
 const FIREWORK_INTERVAL_MS = 650;
+/** Number of sparks in one firework explosion. */
 const SPARKS_PER_BURST = 64;
 
+/** All particles that are currently alive. */
 let particles: Particle[] = [];
+/** Ids of the running intervals for fireworks and confetti rain. */
 let timers: number[] = [];
+/** Id of the pending animation frame. */
 let frameId = 0;
+/** Loaded sticker images of the current theme. */
 let sprites: HTMLImageElement[] = [];
 
+/**
+ * Returns a random number within a range.
+ * @param min - Lower bound (inclusive).
+ * @param max - Upper bound (exclusive).
+ * @returns A random number between min and max.
+ */
 const random = (min: number, max: number): number => min + Math.random() * (max - min);
+/**
+ * Picks a random element of an array.
+ * @typeParam T - Type of the array elements.
+ * @param items - Array to pick from; it must not be empty.
+ * @returns A random element.
+ */
 const pick = <T>(items: T[]): T => items[Math.floor(Math.random() * items.length)];
 
 /**

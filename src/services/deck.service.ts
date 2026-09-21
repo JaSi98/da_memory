@@ -2,6 +2,7 @@ import { Card } from '../models/card.model';
 import { THEMES, motifUrl } from '../config/theme.config';
 import type { BoardSize, ThemeId } from '../models/theme.model';
 
+/** Number of pairs, and therefore motifs, per board size. */
 const PAIRS_BY_SIZE: Record<BoardSize, number> = {
   '4x4': 8,
   '4x6': 12,

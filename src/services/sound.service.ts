@@ -1,3 +1,4 @@
+/** Shared audio context, created on first use. */
 let context: AudioContext | null = null;
 
 /**

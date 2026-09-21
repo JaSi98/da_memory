@@ -1,15 +1,14 @@
-// Farben aus dem Figma-Design
+// Colors from the Figma design
 $color-bg: #303131;
 $color-white: #ffffff;
 $color-blue: #2bb1ff;
 $color-orange: #f58e39;
 $color-yellow: #f0ea6e;
 $color-teal: #4dd5bc;
-$color-teal-dark: #286f62;
 
 $font-family: 'Poppins', sans-serif;
 
-// Farben je Spieler (bis zu 4 Spieler)
+// Colors per player (up to four players)
 $player-colors: (
   'blue': $color-blue,
   'orange': $color-orange,
@@ -17,15 +16,6 @@ $player-colors: (
   'purple': #7c6fe0,
 );
 
-// Farbschema je Theme (Story 3: Theme veraendert die Kartenfarben)
-$theme-colors: (
-  'code-vibes': (#4dd5bc, #286f62),
-  'gaming': (#ef6fa1, #b23a6b),
-  'da-projects': (#4fa3f7, #1f5fa8),
-  'foods': (#f5a623, #b5680a),
-);
-
-$radius-sm: 8px;
 $radius-md: 12px;
 $radius-lg: 20px;
 

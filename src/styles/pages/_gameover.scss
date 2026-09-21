@@ -6,7 +6,7 @@ $spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 $pawn: url('/images/icons/chess-pawn.svg');
 $scale: url('/images/end/scale.svg');
 
-// Gestaltung der End-Screens je Theme (Pixel im 1440er Raster, Farben/Schriften aus Figma).
+// Look of the end screens per theme (pixels in the 1440 grid, colors and typefaces from Figma).
 $end-themes: (
   'code-vibes': (
     '--bg-over': #303131,
@@ -142,7 +142,7 @@ $end-themes: (
     color: var(--fg-result);
   }
 
-  // Gaming: Retro-Gitter, das langsam auf den Betrachter zulaeuft
+  // Gaming: retro grid that slowly runs toward the viewer
   &[data-theme='gaming']::before {
     content: '';
     position: absolute;
@@ -154,7 +154,7 @@ $end-themes: (
     animation: grid-run 2.4s linear infinite;
   }
 
-  // DA Projects: weiche Lichtflecken, die langsam driften
+  // DA Projects: soft light spots that drift slowly
   &[data-theme='da-projects']::before {
     content: '';
     position: absolute;
@@ -296,7 +296,7 @@ $end-themes: (
     margin: u(6) 0 u(14);
   }
 
-  // Sanft pulsierendes Leuchten hinter dem Sieger-Symbol
+  // Softly pulsing glow behind the winner symbol
   &__hero-wrap::before {
     content: '';
     position: absolute;
@@ -391,7 +391,7 @@ $end-themes: (
     }
   }
 
-  // Spielerfarben fuer Name und Symbol (auf dunklem Grund ggf. heller als in der Game Bar)
+  // Player colors for name and symbol (on dark backgrounds possibly brighter than in the game bar)
   @each $name in ('blue', 'orange', 'green', 'purple') {
     [data-player='#{$name}'] {
       --player-color: var(--hc-#{$name}, var(--pc-#{$name}));

@@ -1,4 +1,4 @@
-// Rechnet Figma-Pixel (Frame 1440x1024) in die skalierte Einheit --s um.
+// Converts Figma pixels (frame 1440x1024) into the scaled unit --s.
 @function u($n) {
   @return calc(#{$n} * var(--s));
 }

@@ -1,7 +1,10 @@
 import type { PlayerColor } from '../models/theme.model';
 
+/** Colors of the players taking part in turn order. */
 let activePlayers: PlayerColor[] = ['blue', 'orange'];
+/** Points per player. */
 let scores: Partial<Record<PlayerColor, number>> = {};
+/** Index of the active player in the list of active players. */
 let activeIndex = 0;
 
 /**

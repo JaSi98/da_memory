@@ -1,5 +1,6 @@
 import type { ThemeId, ThemeConfig } from '../models/theme.model';
 
+/** All themes by id. */
 export const THEMES: Record<ThemeId, ThemeConfig> = {
   'code-vibes': {
     id: 'code-vibes',

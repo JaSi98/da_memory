@@ -2,23 +2,32 @@ import { THEMES, coverUrl, motifUrl } from '../config/theme.config';
 import { gameBarTemplate } from '../game/gamebar.template';
 import type { GameSettings, BoardSize, PlayerCount, ThemeId, PlayerColor } from '../models/theme.model';
 
+/**
+ * One radio option of the settings form.
+ */
 interface Option {
+  /** Value that is submitted with the form. */
   value: string;
+  /** Text shown next to the radio button. */
   label: string;
+  /** Short text shown in the breadcrumb. */
   short: string;
 }
 
+/** Breadcrumb entries: name of the radio group and its placeholder text. */
 const CRUMBS: { name: string; placeholder: string }[] = [
   { name: 'theme', placeholder: 'Game theme' },
   { name: 'playerCount', placeholder: 'Player' },
   { name: 'boardSize', placeholder: 'Board size' },
 ];
+/** Options of the player count group. */
 const PLAYER_OPTIONS: Option[] = [
   { value: '1', label: '1 Player (vs Computer)', short: '1 Player' },
   { value: '2', label: '2 Players', short: '2 Players' },
   { value: '3', label: '3 Players', short: '3 Players' },
   { value: '4', label: '4 Players', short: '4 Players' },
 ];
+/** Options of the board size group. */
 const SIZE_OPTIONS: Option[] = [
   { value: '4x4', label: '16 cards', short: '16 Cards' },
   { value: '4x6', label: '24 cards', short: '24 Cards' },
