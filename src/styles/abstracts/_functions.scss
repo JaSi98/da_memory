@@ -2,3 +2,8 @@
 @function u($n) {
   @return calc(#{$n} * var(--s));
 }
+
+// Like u(), but for font sizes: never smaller than 16px, however small the window is.
+@function fs($n) {
+  @return max(16px, calc(#{$n} * var(--s)));
+}

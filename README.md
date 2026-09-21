@@ -123,7 +123,7 @@ src/
 
 **Theme system.** The active theme is set as the attribute `data-theme` on the root element of a screen. SCSS maps per theme are written out as CSS variables with `@each` (colors, typefaces, card dimensions, game bar look). This way every screen has a single markup and the theme decides how it looks.
 
-**Scaling.** Every screen sets `--s` as the ratio of the window to the Figma frame. The SCSS function `u(24)` converts Figma pixels into `calc(24 * var(--s))`. All measurements from the design can therefore be used unchanged.
+**Scaling.** Every screen sets `--s` as the ratio of the window to the Figma frame. The SCSS function `u(24)` converts Figma pixels into `calc(24 * var(--s))`. All measurements from the design can therefore be used unchanged. Font sizes use `fs()` instead, which works the same way but never goes below 16px.
 
 **Computer opponent.** All revealed cards are stored in a memory list. At the start of a turn the computer looks for a fully known pair in that list. If there is none, it reveals a card and uses the known partner for the second card, if one exists.
 

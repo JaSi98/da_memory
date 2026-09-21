@@ -51,7 +51,7 @@ $stage-themes: (
     position: absolute;
     left: u(186);
     top: u(113);
-    font: 700 u(54) / u(67) 'Red Rose', sans-serif;
+    font: 700 fs(54) / u(67) 'Red Rose', sans-serif;
 
     // Yellow line with a diamond below the heading
     &::before,
@@ -91,7 +91,7 @@ $stage-themes: (
     align-items: center;
     gap: u(15);
     margin-bottom: u(20);
-    font: 700 u(24) / u(27) 'Almarai', sans-serif;
+    font: 700 fs(24) / u(27) 'Almarai', sans-serif;
   }
 
   &__icon {
@@ -112,7 +112,7 @@ $stage-themes: (
     display: flex;
     align-items: center;
     gap: u(12);
-    font: 400 u(20) / u(22) 'Almarai', sans-serif;
+    font: 400 fs(20) / u(22) 'Almarai', sans-serif;
 
     input {
       appearance: none;
@@ -250,7 +250,7 @@ $stage-themes: (
     height: u(80);
     padding: 0 u(20) 0 u(24);
     background: #f5f5f5;
-    font: 400 u(20) / u(22) 'Almarai', sans-serif;
+    font: 400 fs(20) / u(22) 'Almarai', sans-serif;
   }
 
   // Slanted dividers; chosen values get a diamond at the bottom.
@@ -297,7 +297,7 @@ $stage-themes: (
     padding: u(14) u(20);
     background: $color-yellow;
     color: $color-bg;
-    font: 700 u(20) / u(25) 'Red Rose', sans-serif;
+    font: 700 fs(20) / u(25) 'Red Rose', sans-serif;
     transition: transform 250ms $ease, background-color 200ms ease, color 200ms ease;
 
     &:disabled {

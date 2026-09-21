@@ -36,11 +36,11 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   &__hello {
-    font: 400 u(48) / 1.125 'Almarai', sans-serif;
+    font: 400 fs(48) / 1.125 'Almarai', sans-serif;
   }
 
   &__title {
-    font: 700 u(140) / 1.25 'Red Rose', sans-serif;
+    font: 700 fs(140) / 1.25 'Red Rose', sans-serif;
   }
 
   &__play {
@@ -54,7 +54,7 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
     transform: translateX(-50%);
     background: $color-yellow;
     color: $color-bg;
-    font: 700 u(40) / u(50) 'Red Rose', sans-serif;
+    font: 700 fs(40) / u(50) 'Red Rose', sans-serif;
     transition: transform 200ms $ease;
 
     &:active {

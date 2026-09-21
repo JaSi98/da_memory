@@ -231,14 +231,14 @@ $end-themes: (
     border-radius: u(30);
     background: #ffe81a;
     color: #000;
-    font: 700 u(96) / 1 var(--badge-font);
+    font: 700 fs(96) / 1 var(--badge-font);
     letter-spacing: 0.04em;
     animation: badge-in 800ms $spring both;
     box-shadow: 0 u(10) 0 rgba(#000, 0.18);
   }
 
   &__label {
-    font-size: u(28);
+    font-size: fs(28);
     opacity: 0;
     animation: rise 600ms $ease 500ms both;
   }
@@ -250,7 +250,7 @@ $end-themes: (
   }
 
   &__kicker {
-    font-size: u(40);
+    font-size: fs(40);
     line-height: 1;
     opacity: 0;
     animation: none;
@@ -272,7 +272,7 @@ $end-themes: (
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    font: var(--name-weight) u(var(--name-size)) / 1.15 var(--end-font);
+    font: var(--name-weight) fs(var(--name-size)) / 1.15 var(--end-font);
     letter-spacing: 0.02em;
     text-transform: var(--name-case);
     color: var(--name-fixed, var(--player-color));
@@ -368,7 +368,7 @@ $end-themes: (
     border-radius: u(var(--button-radius));
     background: var(--button-bg);
     color: var(--button-color);
-    font: 700 u(var(--button-size)) / 1.2 var(--end-font);
+    font: 700 fs(var(--button-size)) / 1.2 var(--end-font);
     opacity: 0;
     transition: transform 250ms $ease, filter 250ms ease;
 
