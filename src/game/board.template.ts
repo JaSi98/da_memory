@@ -2,7 +2,12 @@ import type { Card } from '../models/card.model';
 import type { BoardSize, ThemeId } from '../models/theme.model';
 import { coverUrl } from '../config/theme.config';
 
-/** Markup einer Karte. Der Zustand kommt spaeter ueber Klassen dazu. */
+/**
+ * Builds the markup of one card. Its state is added later through CSS classes.
+ * @param card - Card to render.
+ * @param theme - Theme that provides the cover image.
+ * @returns HTML markup of the card.
+ */
 function cardTemplate(card: Card, theme: ThemeId): string {
   return `
     <button class="card" type="button" data-id="${card.id}">
@@ -13,7 +18,13 @@ function cardTemplate(card: Card, theme: ThemeId): string {
     </button>`;
 }
 
-/** Markup des kompletten Spielfelds. */
+/**
+ * Builds the markup of the whole board.
+ * @param cards - All cards in board order.
+ * @param size - Board size.
+ * @param theme - Theme that provides the cover image.
+ * @returns HTML markup of the board.
+ */
 export function boardTemplate(cards: Card[], size: BoardSize, theme: ThemeId): string {
   return `
     <section class="board" data-size="${size}">

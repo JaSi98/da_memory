@@ -223,7 +223,12 @@ $bar-themes: (
   }
 
   &__bot {
-    font-size: 0.7em;
+    margin-left: u(6);
+    padding: 0.15em 0.4em;
+    border: 1px solid currentColor;
+    border-radius: 3px;
+    font-size: 0.5em;
+    letter-spacing: 0.06em;
   }
 
   &__icon,

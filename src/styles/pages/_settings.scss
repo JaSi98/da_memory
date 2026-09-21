@@ -6,7 +6,7 @@ $marker-color: #e9d54d;
 $marker: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 20' preserveAspectRatio='none'%3E%3Crect x='0' y='7' width='50' height='6' fill='%23E9D54D'/%3E%3Cpolygon points='50,0 60,10 50,20 40,10' fill='%23E9D54D'/%3E%3C/svg%3E");
 $start-icon: url('/images/icons/smart-display.svg');
 
-// Bühne der Live-Vorschau je Theme (Farben/Kartenmaße aus den Figma-Mockups).
+// Buehne der Live-Vorschau je Theme (Farben/Kartenmasse aus den Figma-Mockups).
 $stage-themes: (
   'code-vibes': (
     '--stage-bg': linear-gradient(to top right, #5a5b5b, #2e2f2f 62%),
@@ -58,7 +58,7 @@ $stage-themes: (
     top: u(113);
     font: 700 u(54) / u(67) 'Red Rose', sans-serif;
 
-    // Gelbe Linie mit Raute unter der Überschrift
+    // Gelbe Linie mit Raute unter der Ueberschrift
     &::before,
     &::after {
       content: '';
@@ -146,7 +146,7 @@ $stage-themes: (
       align-items: center;
       cursor: pointer;
 
-      // Gelber Marker: wird beim Hover/Auswählen von links eingeblendet
+      // Gelber Marker: wird beim Hover/Auswaehlen von links eingeblendet
       &::after {
         content: '';
         width: u(50);
@@ -170,7 +170,7 @@ $stage-themes: (
     }
   }
 
-  // Nur die gewählte Option zeigt den Marker, solange keine andere überfahren wird.
+  // Nur die gewaehlte Option zeigt den Marker, solange keine andere ueberfahren wird.
   &__options:not(:hover) &__option input:checked + label {
     font-weight: 700;
 
@@ -251,7 +251,7 @@ $stage-themes: (
     font: 400 u(20) / u(22) 'Almarai', sans-serif;
   }
 
-  // Schräge Trennstriche; gewählte Werte bekommen eine Raute am Fuß.
+  // Schraege Trennstriche; gewaehlte Werte bekommen eine Raute am Fuss.
   &__crumb {
     display: inline-flex;
     align-items: center;

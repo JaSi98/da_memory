@@ -1,3 +1,7 @@
+/**
+ * Builds the markup of the exit confirmation dialog.
+ * @returns HTML markup of the dialog overlay.
+ */
 function popupTemplate(): string {
   return `
     <div class="popup-overlay" id="exit-popup">
@@ -11,7 +15,11 @@ function popupTemplate(): string {
     </div>`;
 }
 
-/** Zeigt die Exit-Bestaetigung als Overlay ueber dem Spielfeld an. */
+/**
+ * Shows the exit confirmation as an overlay above the board.
+ * @param content - Container element the overlay is added to.
+ * @param onExit - Called when the user confirms leaving the game.
+ */
 export function showExitPopup(content: HTMLElement, onExit: () => void): void {
   content.insertAdjacentHTML('beforeend', popupTemplate());
   const overlay = content.querySelector('#exit-popup') as HTMLElement;

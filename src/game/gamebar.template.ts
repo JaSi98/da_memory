@@ -1,8 +1,14 @@
 import type { PlayerColor } from '../models/theme.model';
 import { PLAYER_LABELS } from '../config/player.config';
 
-const BOT_BADGE = '<span class="game-bar__bot" role="img" aria-label="Computer">🤖</span>';
+const BOT_BADGE = '<span class="game-bar__bot" role="img" aria-label="Computer">CPU</span>';
 
+/**
+ * Builds the score entry of a single player for the game bar.
+ * @param player - Color of the player.
+ * @param computerPlayer - Color controlled by the computer, or null in a game without computer.
+ * @returns HTML markup of the score entry.
+ */
 function scoreTemplate(player: PlayerColor, computerPlayer: PlayerColor | null): string {
   return `
     <span class="game-bar__score" data-player="${player}">
@@ -12,7 +18,12 @@ function scoreTemplate(player: PlayerColor, computerPlayer: PlayerColor | null):
     </span>`;
 }
 
-/** Markup der Punkteleiste oberhalb des Spielfelds; das Aussehen kommt vom Theme. */
+/**
+ * Builds the game bar above the board with scores, current player and exit button. The look of each part is defined by the theme in CSS.
+ * @param players - Colors of all active players in turn order.
+ * @param computerPlayer - Color controlled by the computer, or null in a game without computer.
+ * @returns HTML markup of the game bar.
+ */
 export function gameBarTemplate(players: PlayerColor[], computerPlayer: PlayerColor | null): string {
   return `
     <header id="game-bar" class="game-bar" data-active-player="${players[0]}">

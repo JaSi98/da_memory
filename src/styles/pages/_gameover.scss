@@ -142,7 +142,7 @@ $end-themes: (
     color: var(--fg-result);
   }
 
-  // Gaming: Retro-Gitter, das langsam auf den Betrachter zuläuft
+  // Gaming: Retro-Gitter, das langsam auf den Betrachter zulaeuft
   &[data-theme='gaming']::before {
     content: '';
     position: absolute;
@@ -276,6 +276,7 @@ $end-themes: (
 
     span {
       display: inline-block;
+      white-space: pre;
       opacity: 0;
     }
   }
@@ -390,7 +391,7 @@ $end-themes: (
     }
   }
 
-  // Spielerfarben für Name und Symbol (auf dunklem Grund ggf. heller als in der Game Bar)
+  // Spielerfarben fuer Name und Symbol (auf dunklem Grund ggf. heller als in der Game Bar)
   @each $name in ('blue', 'orange', 'green', 'purple') {
     [data-player='#{$name}'] {
       --player-color: var(--hc-#{$name}, var(--pc-#{$name}));

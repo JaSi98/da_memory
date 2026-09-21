@@ -25,6 +25,12 @@ const SIZE_OPTIONS: Option[] = [
   { value: '6x6', label: '36 cards', short: '36 Cards' },
 ];
 
+/**
+ * Builds a single radio option of the settings form.
+ * @param name - Name of the radio group.
+ * @param option - Option to render.
+ * @returns HTML markup of the list item.
+ */
 function optionTemplate(name: string, option: Option): string {
   const id = `${name}-${option.value}`;
   return `
@@ -34,12 +40,24 @@ function optionTemplate(name: string, option: Option): string {
     </li>`;
 }
 
+/**
+ * Lists all themes that can be selected (themes with at least one motif).
+ * @returns Options for the theme group.
+ */
 function themeOptions(): Option[] {
   return Object.values(THEMES)
     .filter((theme) => theme.motifs.length > 0)
     .map((theme) => ({ value: theme.id, label: theme.label, short: theme.label.replace(/ theme$/i, '') }));
 }
 
+/**
+ * Builds one section of the settings form with icon, heading and radio options.
+ * @param icon - File name of the section icon without extension.
+ * @param legend - Heading of the section.
+ * @param name - Name of the radio group.
+ * @param options - Options of the section.
+ * @returns HTML markup of the fieldset.
+ */
 function fieldsetTemplate(icon: string, legend: string, name: string, options: Option[]): string {
   return `
     <fieldset class="settings__section">
@@ -48,6 +66,10 @@ function fieldsetTemplate(icon: string, legend: string, name: string, options: O
     </fieldset>`;
 }
 
+/**
+ * Builds the settings form with all three sections.
+ * @returns HTML markup of the form.
+ */
 function formTemplate(): string {
   return `
     <form id="settings-form" class="settings__form">
@@ -57,12 +79,19 @@ function formTemplate(): string {
     </form>`;
 }
 
-/** Liefert das erste auswaehlbare Theme als Vorschau-Default. */
+/**
+ * Finds the first selectable theme, used as default for the preview.
+ * @returns Id of the first theme with motifs.
+ */
 function firstTheme(): ThemeId {
   return Object.values(THEMES).find((theme) => theme.motifs.length > 0)!.id;
 }
 
-/** Live-Vorschau der beiden Karten und der Game Bar fuer das aktuell gewaehlte Theme. */
+/**
+ * Builds the live preview with game bar and two sample cards for a theme.
+ * @param themeId - Theme to preview.
+ * @returns HTML markup of the preview stage.
+ */
 function previewTemplate(themeId: ThemeId): string {
   const motif = THEMES[themeId].previewMotif;
   const players: PlayerColor[] = ['blue', 'orange'];
@@ -77,6 +106,10 @@ function previewTemplate(themeId: ThemeId): string {
     </div>`;
 }
 
+/**
+ * Builds the breadcrumb that shows the chosen values and holds the start button.
+ * @returns HTML markup of the breadcrumb.
+ */
 function breadcrumbTemplate(): string {
   const crumbs = CRUMBS.map((crumb) => `<span class="settings__crumb" data-crumb="${crumb.name}">${crumb.placeholder}</span>`);
   return `
@@ -88,6 +121,10 @@ function breadcrumbTemplate(): string {
     </div>`;
 }
 
+/**
+ * Builds the complete settings screen.
+ * @returns HTML markup of the settings screen.
+ */
 function settingsTemplate(): string {
   return `
     <main class="settings">
@@ -99,7 +136,11 @@ function settingsTemplate(): string {
     </main>`;
 }
 
-/** Zeigt gewaehlte Werte im Breadcrumb; nicht gewaehlte behalten ihren Platzhalter. */
+/**
+ * Shows the chosen values in the breadcrumb; unchosen values keep their placeholder.
+ * @param root - Element containing the breadcrumb.
+ * @param form - Settings form to read the choices from.
+ */
 function updateBreadcrumb(root: HTMLElement, form: HTMLFormElement): void {
   for (const crumb of CRUMBS) {
     const checked = form.querySelector<HTMLInputElement>(`input[name="${crumb.name}"]:checked`);
@@ -109,7 +150,11 @@ function updateBreadcrumb(root: HTMLElement, form: HTMLFormElement): void {
   }
 }
 
-/** Uebernimmt die Auswahl: Vorschau, Breadcrumb und Start-Button (erst aktiv, wenn alles gewaehlt ist). */
+/**
+ * Applies the current choices to preview, breadcrumb and start button. The start button is enabled once everything is chosen.
+ * @param root - Element containing the settings screen.
+ * @param form - Settings form to read the choices from.
+ */
 function syncSelection(root: HTMLElement, form: HTMLFormElement): void {
   const theme = new FormData(form).get('theme') as ThemeId | null;
   if (theme) root.querySelector('#preview-stage')!.outerHTML = previewTemplate(theme);
@@ -117,6 +162,11 @@ function syncSelection(root: HTMLElement, form: HTMLFormElement): void {
   root.querySelector<HTMLButtonElement>('.settings__start')!.disabled = !form.checkValidity();
 }
 
+/**
+ * Reads the chosen values out of the settings form.
+ * @param form - Completely filled settings form.
+ * @returns The game settings.
+ */
 function readSettings(form: HTMLFormElement): GameSettings {
   const data = new FormData(form);
   return {
@@ -126,7 +176,11 @@ function readSettings(form: HTMLFormElement): GameSettings {
   };
 }
 
-/** Rendert die Einstellungen in den Content-Bereich und startet das Spiel nach Bestaetigung. */
+/**
+ * Renders the settings screen and starts the game after confirmation.
+ * @param content - Container element that receives the screen.
+ * @param onStart - Called with the chosen settings when the form is submitted.
+ */
 export function renderSettingsScreen(content: HTMLElement, onStart: (settings: GameSettings) => void): void {
   content.innerHTML = settingsTemplate();
   const form = content.querySelector('#settings-form') as HTMLFormElement;

@@ -41,7 +41,10 @@ export function startGame(
   resetScores(getActivePlayers(settings.playerCount));
 }
 
-/** Rendert Punkteleiste und Spielfeld und bindet die Klick-Listener. */
+/**
+ * Renders game bar and board and binds the click listeners.
+ * @param settings - Theme, board size and player count.
+ */
 function renderBoard(settings: GameSettings): void {
   const players = getActivePlayers(settings.playerCount);
   const board = boardTemplate(cards, settings.boardSize, settings.theme);
@@ -53,12 +56,19 @@ function renderBoard(settings: GameSettings): void {
   content.querySelector('#exit-game-btn')?.addEventListener('click', () => showExitPopup(content, onQuit));
 }
 
-/** Sucht das DOM-Element zu einer Karte. */
+/**
+ * Finds the DOM element that belongs to a card.
+ * @param card - Card to look up.
+ * @returns The card button element.
+ */
 function findElement(card: Card): HTMLElement {
   return content.querySelector(`.card[data-id="${card.id}"]`) as HTMLElement;
 }
 
-/** Nimmt Klicks im Spielfeld per Event Delegation entgegen. */
+/**
+ * Handles clicks on the board using event delegation.
+ * @param event - Click event from the board.
+ */
 function handleBoardClick(event: MouseEvent): void {
   const element = (event.target as HTMLElement).closest<HTMLElement>('.card');
   if (isLocked || !element || getActivePlayer() === computerPlayer) return;
@@ -70,13 +80,20 @@ function handleBoardClick(event: MouseEvent): void {
   if (flipped.length === 2) checkPair();
 }
 
-/** Sucht zu einer Karte die passende Partnerkarte, die schon einmal aufgedeckt wurde. */
+/**
+ * Finds the partner of a card if that partner was revealed before and is not matched yet.
+ * @param card - Card whose partner is searched.
+ * @returns The known partner card, or undefined.
+ */
 function findKnownPartner(card: Card): Card | undefined {
   return cards.find((other) => other.id !== card.id && other.pairId === card.pairId
     && seenCards.has(other.id) && !other.isMatched);
 }
 
-/** Sucht ein Paar, dessen beide Karten dem Computer schon bekannt sind. */
+/**
+ * Finds a pair whose two cards are both already known to the computer.
+ * @returns The two cards of the pair, or undefined.
+ */
 function findKnownPair(): [Card, Card] | undefined {
   for (const card of cards.filter((item) => seenCards.has(item.id) && !item.isMatched)) {
     const partner = findKnownPartner(card);
@@ -85,7 +102,11 @@ function findKnownPair(): [Card, Card] | undefined {
   return undefined;
 }
 
-/** Waehlt eine zufaellige, noch verdeckte Karte (unbekannte Karten werden bevorzugt). */
+/**
+ * Picks a random hidden card; cards that were never seen are preferred.
+ * @param exclude - Cards that must not be picked.
+ * @returns The chosen card, or undefined if none is left.
+ */
 function pickRandomCard(exclude: Card[] = []): Card | undefined {
   const open = cards.filter((card) => !card.isFlipped && !card.isMatched && !exclude.includes(card));
   const unseen = open.filter((card) => !seenCards.has(card.id));
@@ -93,14 +114,21 @@ function pickRandomCard(exclude: Card[] = []): Card | undefined {
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
-/** Waehlt die zweite Karte: den bekannten Partner der ersten, sonst eine zufaellige. */
+/**
+ * Picks the next card for the computer: the known partner of the first card, otherwise a random one.
+ * @returns The chosen card, or undefined if none is left.
+ */
 function pickNextComputerCard(): Card | undefined {
   if (flipped.length === 1) return findKnownPartner(flipped[0]) ?? pickRandomCard(flipped);
   return pickRandomCard();
 }
 
-/** Deckt ein Paar auf, das der Computer sich gemerkt hat. */
-function playKnownPair([first, second]: [Card, Card]): void {
+/**
+ * Reveals a pair that the computer remembered, one card after the other.
+ * @param pair - The two cards of the pair.
+ */
+function playKnownPair(pair: [Card, Card]): void {
+  const [first, second] = pair;
   revealCard(first, findElement(first));
   window.setTimeout(() => {
     revealCard(second, findElement(second));
@@ -108,7 +136,9 @@ function playKnownPair([first, second]: [Card, Card]): void {
   }, COMPUTER_MOVE_DELAY_MS);
 }
 
-/** Spielt einen Computer-Zug: erst gemerkte Paare, sonst aufdecken und dazulernen. */
+/**
+ * Plays one step of the computer turn: remembered pairs first, otherwise reveal a card and learn.
+ */
 function playComputerCard(): void {
   const pair = flipped.length === 0 ? findKnownPair() : undefined;
   if (pair) return playKnownPair(pair);
@@ -119,13 +149,19 @@ function playComputerCard(): void {
   else window.setTimeout(playComputerCard, COMPUTER_MOVE_DELAY_MS);
 }
 
-/** Stoesst den Computer-Zug an, sofern der Computer aktuell am Zug ist. */
+/**
+ * Starts the computer turn if the computer is the active player.
+ */
 function maybeTakeComputerTurn(): void {
   if (getActivePlayer() !== computerPlayer) return;
   window.setTimeout(playComputerCard, COMPUTER_MOVE_DELAY_MS);
 }
 
-/** Deckt eine Karte auf: Zustand im Modell, Klasse im DOM. */
+/**
+ * Reveals a card in the model and in the DOM.
+ * @param card - Card to reveal.
+ * @param element - Button element of the card.
+ */
 function revealCard(card: Card, element: HTMLElement): void {
   card.isFlipped = true;
   element.classList.add('is-flipped');
@@ -134,7 +170,9 @@ function revealCard(card: Card, element: HTMLElement): void {
   playFlip();
 }
 
-/** Prueft das aufgedeckte Paar. */
+/**
+ * Checks the two revealed cards.
+ */
 function checkPair(): void {
   const [first, second] = flipped;
   isLocked = true;
@@ -147,7 +185,11 @@ function checkPair(): void {
   window.setTimeout(() => hidePair(first, second), FLIP_BACK_DELAY_MS);
 }
 
-/** Markiert ein gefundenes Paar dauerhaft, eingefaerbt in der Farbe des findenden Spielers. */
+/**
+ * Marks a found pair permanently, colored in the color of the player who found it.
+ * @param first - First card of the pair.
+ * @param second - Second card of the pair.
+ */
 function markAsMatched(first: Card, second: Card): void {
   const player = getActivePlayer();
   for (const card of [first, second]) {
@@ -159,7 +201,11 @@ function markAsMatched(first: Card, second: Card): void {
   endTurn(true);
 }
 
-/** Dreht ein nicht passendes Paar zurueck. */
+/**
+ * Turns a non matching pair back over.
+ * @param first - First card of the pair.
+ * @param second - Second card of the pair.
+ */
 function hidePair(first: Card, second: Card): void {
   for (const card of [first, second]) {
     card.isFlipped = false;
@@ -168,7 +214,10 @@ function hidePair(first: Card, second: Card): void {
   endTurn(false);
 }
 
-/** Schliesst den Zug ab, prueft auf Spielende und stoesst ggf. den Computer an. */
+/**
+ * Ends the turn, checks for the end of the game and triggers the computer if needed.
+ * @param wasMatch - True if the turn found a pair; the same player then continues.
+ */
 function endTurn(wasMatch: boolean): void {
   flipped = [];
   isLocked = false;
@@ -177,7 +226,9 @@ function endTurn(wasMatch: boolean): void {
   maybeTakeComputerTurn();
 }
 
-/** Beendet das Spiel und meldet das Ergebnis an den Aufrufer. */
+/**
+ * Ends the game and reports the result to the caller.
+ */
 function finishGame(): void {
   onGameOver(getScores());
 }

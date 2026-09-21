@@ -14,19 +14,21 @@ interface Particle {
   rotation: number;
   spin: number;
   glyph?: string;
+  image?: HTMLImageElement;
 }
 
 interface EffectTheme {
   colors: string[];
   glyphs: string[];
+  sprites: string[];
   glow: boolean;
 }
 
 const EFFECT_THEMES: Record<ThemeId, EffectTheme> = {
-  'code-vibes': { colors: ['#4dd5bc', '#f0ea6e', '#2bb1ff', '#f58e39', '#ffffff'], glyphs: ['</>', '{ }', '=>', '&&', ';'], glow: true },
-  gaming: { colors: ['#ed1b76', '#f0ea6e', '#1faafc', '#7cff6b', '#ffffff'], glyphs: ['★', '♦', '✦', '●'], glow: true },
-  'da-projects': { colors: ['#bfe5f2', '#f0ea6e', '#ffffff', '#fa5a5a', '#f58e39'], glyphs: [], glow: true },
-  foods: { colors: ['#f3832d', '#a45212', '#ed1b76', '#f0ea6e', '#5fbf7a'], glyphs: ['🍔', '🍕', '🍩', '🍟', '🍦', '🧁', '🌮'], glow: false },
+  'code-vibes': { colors: ['#4dd5bc', '#f0ea6e', '#2bb1ff', '#f58e39', '#ffffff'], glyphs: ['</>', '{ }', '=>', '&&', ';'], sprites: [], glow: true },
+  gaming: { colors: ['#ed1b76', '#f0ea6e', '#1faafc', '#7cff6b', '#ffffff'], glyphs: ['*', '+', '#', 'o'], sprites: [], glow: true },
+  'da-projects': { colors: ['#bfe5f2', '#f0ea6e', '#ffffff', '#fa5a5a', '#f58e39'], glyphs: [], sprites: [], glow: true },
+  foods: { colors: ['#f3832d', '#a45212', '#ed1b76', '#f0ea6e', '#5fbf7a'], glyphs: [], sprites: ['fries', 'pizza', 'donut', 'ice-cream', 'cupcake', 'taco', 'burger', 'sushi', 'macarons'], glow: false },
 };
 
 const GRAVITY = 0.16;
@@ -36,27 +38,67 @@ const SPARKS_PER_BURST = 64;
 let particles: Particle[] = [];
 let timers: number[] = [];
 let frameId = 0;
+let sprites: HTMLImageElement[] = [];
 
 const random = (min: number, max: number): number => min + Math.random() * (max - min);
 const pick = <T>(items: T[]): T => items[Math.floor(Math.random() * items.length)];
 
+/**
+ * Creates a particle with default values.
+ * @param x - Start position, horizontal.
+ * @param y - Start position, vertical.
+ * @param color - CSS color of the particle.
+ * @returns A new particle.
+ */
 function baseParticle(x: number, y: number, color: string): Particle {
   return { x, y, vx: 0, vy: 0, size: 4, life: 1, decay: 0.012, gravity: GRAVITY, color, rotation: 0, spin: 0 };
 }
 
-/** Ein Funke eines Feuerwerks: fliegt radial nach aussen und verglueht. */
+/**
+ * Creates one spark of a firework that flies outward and fades.
+ * @param x - Center of the explosion, horizontal.
+ * @param y - Center of the explosion, vertical.
+ * @param color - CSS color of the spark.
+ * @returns A new spark particle.
+ */
 function spark(x: number, y: number, color: string): Particle {
   const angle = random(0, Math.PI * 2);
   const speed = random(1.5, 7.5);
   return { ...baseParticle(x, y, color), vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, size: random(1.5, 3.2), decay: random(0.009, 0.018) };
 }
 
-/** Ein Konfettiteil (Rechteck oder Themen-Glyphe) mit Startgeschwindigkeit. */
+/**
+ * Creates one piece of confetti: a rectangle, a theme glyph or a theme sticker.
+ * @param x - Start position, horizontal.
+ * @param y - Start position, vertical.
+ * @param vx - Initial horizontal speed.
+ * @param vy - Initial vertical speed.
+ * @param theme - Effect settings of the current theme.
+ * @returns A new confetti particle.
+ */
 function confetto(x: number, y: number, vx: number, vy: number, theme: EffectTheme): Particle {
-  const glyph = theme.glyphs.length > 0 && Math.random() < 0.55 ? pick(theme.glyphs) : undefined;
-  return { ...baseParticle(x, y, pick(theme.colors)), vx, vy, size: random(8, 15), decay: 0.004, glyph, rotation: random(0, 6), spin: random(-0.2, 0.2) };
+  const useShape = Math.random() < 0.55;
+  const glyph = useShape && theme.glyphs.length > 0 ? pick(theme.glyphs) : undefined;
+  const image = useShape && sprites.length > 0 ? pick(sprites) : undefined;
+  return { ...baseParticle(x, y, pick(theme.colors)), vx, vy, size: random(8, 15), decay: 0.004, glyph, image, rotation: random(0, 6), spin: random(-0.2, 0.2) };
 }
 
+/**
+ * Loads a motif image that is used as confetti sticker.
+ * @param themeId - Theme the motif belongs to.
+ * @param name - File name of the motif without extension.
+ * @returns The image element.
+ */
+function loadSprite(themeId: ThemeId, name: string): HTMLImageElement {
+  const image = new Image();
+  image.src = `./images/${themeId}/${name}.svg`;
+  return image;
+}
+
+/**
+ * Launches one firework explosion at a random position in the upper screen half.
+ * @param theme - Effect settings of the current theme.
+ */
 function fireworkBurst(theme: EffectTheme): void {
   const x = random(window.innerWidth * 0.15, window.innerWidth * 0.85);
   const y = random(window.innerHeight * 0.12, window.innerHeight * 0.5);
@@ -65,7 +107,10 @@ function fireworkBurst(theme: EffectTheme): void {
   playPop();
 }
 
-/** Zwei Konfetti-Kanonen aus den unteren Ecken schiessen schraeg nach oben. */
+/**
+ * Shoots confetti from both bottom corners diagonally upward.
+ * @param theme - Effect settings of the current theme.
+ */
 function cannons(theme: EffectTheme): void {
   for (const side of [-1, 1]) {
     const x = side < 0 ? 0 : window.innerWidth;
@@ -76,10 +121,18 @@ function cannons(theme: EffectTheme): void {
   }
 }
 
+/**
+ * Lets one piece of confetti fall from the top edge.
+ * @param theme - Effect settings of the current theme.
+ */
 function rainDrop(theme: EffectTheme): void {
   particles.push(confetto(random(0, window.innerWidth), -20, random(-1, 1), random(1.5, 3.5), theme));
 }
 
+/**
+ * Advances a particle by one frame (position, gravity, drag, fading).
+ * @param p - Particle to update.
+ */
 function move(p: Particle): void {
   p.x += p.vx;
   p.y += p.vy;
@@ -89,10 +142,17 @@ function move(p: Particle): void {
   p.rotation += p.spin;
 }
 
+/**
+ * Draws a confetti particle as sticker, glyph or small rectangle.
+ * @param ctx - Drawing context of the canvas.
+ * @param p - Particle to draw.
+ */
 function drawConfetto(ctx: CanvasRenderingContext2D, p: Particle): void {
   ctx.translate(p.x, p.y);
   ctx.rotate(p.rotation);
-  if (p.glyph) {
+  if (p.image) {
+    ctx.drawImage(p.image, -p.size * 1.3, -p.size * 1.3, p.size * 2.6, p.size * 2.6);
+  } else if (p.glyph) {
     ctx.font = `${p.size * 1.6}px sans-serif`;
     ctx.fillText(p.glyph, 0, 0);
   } else {
@@ -100,6 +160,11 @@ function drawConfetto(ctx: CanvasRenderingContext2D, p: Particle): void {
   }
 }
 
+/**
+ * Draws a particle: sparks as circles, confetti through drawConfetto.
+ * @param ctx - Drawing context of the canvas.
+ * @param p - Particle to draw.
+ */
 function draw(ctx: CanvasRenderingContext2D, p: Particle): void {
   ctx.save();
   ctx.globalAlpha = Math.max(0, Math.min(1, p.life * 1.4));
@@ -114,6 +179,11 @@ function draw(ctx: CanvasRenderingContext2D, p: Particle): void {
   ctx.restore();
 }
 
+/**
+ * Runs one animation frame and schedules the next one while the canvas is on the page.
+ * @param canvas - Canvas the effects are drawn on.
+ * @param theme - Effect settings of the current theme.
+ */
 function loop(canvas: HTMLCanvasElement, theme: EffectTheme): void {
   const ctx = canvas.getContext('2d')!;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -126,7 +196,9 @@ function loop(canvas: HTMLCanvasElement, theme: EffectTheme): void {
   if (canvas.isConnected) frameId = requestAnimationFrame(() => loop(canvas, theme));
 }
 
-/** Stoppt alle laufenden Effekte und raeumt auf. */
+/**
+ * Stops all running effects and clears the particles.
+ */
 export function stopEffects(): void {
   timers.forEach((id) => window.clearInterval(id));
   timers = [];
@@ -134,10 +206,16 @@ export function stopEffects(): void {
   particles = [];
 }
 
-/** Startet Konfetti-Kanonen, Konfettiregen und Feuerwerk passend zum Theme. */
+/**
+ * Starts confetti cannons, confetti rain and fireworks for a theme.
+ * @param canvas - Canvas covering the screen.
+ * @param themeId - Theme that decides colors and shapes.
+ * @param durationMs - How long new fireworks and confetti keep appearing, in milliseconds.
+ */
 export function celebrate(canvas: HTMLCanvasElement, themeId: ThemeId, durationMs = 9000): void {
   const theme = EFFECT_THEMES[themeId];
   stopEffects();
+  sprites = theme.sprites.map((name) => loadSprite(themeId, name));
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   loop(canvas, theme);

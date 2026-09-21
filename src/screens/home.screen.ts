@@ -3,6 +3,10 @@ const ARROW = `
     <path d="M0 8H31M24 1L31 8L24 15"></path>
   </svg>`;
 
+/**
+ * Builds the markup of the home screen.
+ * @returns HTML markup of the home screen.
+ */
 function homeTemplate(): string {
   return `
     <main class="home">
@@ -21,7 +25,11 @@ function homeTemplate(): string {
     </main>`;
 }
 
-/** Rendert den Homescreen und startet die Einstellungen per Play-Button. */
+/**
+ * Renders the home screen and wires the play button.
+ * @param content - Container element that receives the screen.
+ * @param onPlay - Called when the play button is clicked.
+ */
 export function renderHomeScreen(content: HTMLElement, onPlay: () => void): void {
   content.innerHTML = homeTemplate();
   content.querySelector('#play-btn')?.addEventListener('click', onPlay);

@@ -13,20 +13,34 @@ const RESTART_LABELS: Record<ThemeId, string> = {
   foods: 'Home',
 };
 
-/** Ermittelt den bzw. die Spieler mit dem hoechsten Punktestand. */
+/**
+ * Finds the player or players with the highest score.
+ * @param scores - Final score per player.
+ * @returns All players sharing the top score; more than one means a draw.
+ */
 function findLeaders(scores: Scores): PlayerColor[] {
   const entries = Object.entries(scores) as [PlayerColor, number][];
   const topScore = Math.max(...entries.map(([, points]) => points));
   return entries.filter(([, points]) => points === topScore).map(([player]) => player);
 }
 
-/** Schriftzug "Game over": Original-Grafik bei Code Vibes, sonst gelbes Schild. */
+/**
+ * Builds the game over heading: original artwork for Code vibes, a yellow sign for the other themes.
+ * @param theme - Theme of the finished game.
+ * @returns HTML markup of the heading.
+ */
 function titleTemplate(theme: ThemeId): string {
   const art = '<img class="endscreen__title-art" src="./images/end/game-over.svg" alt="Game over">';
   return theme === 'code-vibes' ? art : '<span class="endscreen__badge">GAME OVER</span>';
 }
 
-function scoreTemplate([player, points]: [string, number]): string {
+/**
+ * Builds the final score entry of one player.
+ * @param entry - Player color and final score as pair.
+ * @returns HTML markup of the score entry.
+ */
+function scoreTemplate(entry: [string, number]): string {
+  const [player, points] = entry;
   return `
     <span class="game-bar__score" data-player="${player}">
       <i class="game-bar__icon" aria-hidden="true"></i>
@@ -35,6 +49,12 @@ function scoreTemplate([player, points]: [string, number]): string {
     </span>`;
 }
 
+/**
+ * Builds the first panel of the end screen with heading and final score.
+ * @param theme - Theme of the finished game.
+ * @param scores - Final score per player.
+ * @returns HTML markup of the panel.
+ */
 function overTemplate(theme: ThemeId, scores: Scores): string {
   const entries = Object.entries(scores) as [string, number][];
   return `
@@ -45,17 +65,33 @@ function overTemplate(theme: ThemeId, scores: Scores): string {
     </section>`;
 }
 
-/** Jeder Buchstabe bekommt einen Index fuer die gestaffelte Einblend-Animation. */
+/**
+ * Wraps every letter in a span with an index for the staggered entrance animation.
+ * @param text - Text to split.
+ * @returns HTML markup with one span per letter.
+ */
 function lettersTemplate(text: string): string {
-  return [...text].map((char, i) => `<span style="--i:${i}">${char === ' ' ? '&nbsp;' : char}</span>`).join('');
+  return [...text].map((char, i) => `<span style="--i:${i}">${char}</span>`).join('');
 }
 
+/**
+ * Builds the large symbol of the result: trophy, pawn or scale.
+ * @param theme - Theme of the finished game.
+ * @param winner - Winning player, or null for a draw.
+ * @returns HTML markup of the symbol.
+ */
 function heroTemplate(theme: ThemeId, winner: PlayerColor | null): string {
   if (!winner) return '<span class="endscreen__hero endscreen__hero--scale" aria-hidden="true"></span>';
   if (theme === 'gaming') return '<img class="endscreen__hero endscreen__hero--trophy" src="./images/end/trophy.svg" alt="Trophy">';
   return '<span class="endscreen__hero endscreen__hero--pawn" aria-hidden="true"></span>';
 }
 
+/**
+ * Builds the second panel of the end screen with winner or draw.
+ * @param theme - Theme of the finished game.
+ * @param scores - Final score per player.
+ * @returns HTML markup of the panel.
+ */
 function resultTemplate(theme: ThemeId, scores: Scores): string {
   const leaders = findLeaders(scores);
   const winner = leaders.length > 1 ? null : leaders[0];
@@ -69,6 +105,12 @@ function resultTemplate(theme: ThemeId, scores: Scores): string {
     </section>`;
 }
 
+/**
+ * Builds the complete end screen including the effects canvas.
+ * @param theme - Theme of the finished game.
+ * @param scores - Final score per player.
+ * @returns HTML markup of the end screen.
+ */
 function screenTemplate(theme: ThemeId, scores: Scores): string {
   return `
     <main class="endscreen" data-theme="${theme}" data-phase="over">
@@ -78,7 +120,10 @@ function screenTemplate(theme: ThemeId, scores: Scores): string {
     </main>`;
 }
 
-/** Zaehlt die Punktzahlen von 0 bis zum Endstand hoch. */
+/**
+ * Counts the displayed scores up from zero to their final value.
+ * @param root - Element containing the score outputs.
+ */
 function countUp(root: HTMLElement): void {
   root.querySelectorAll<HTMLOutputElement>('output[data-target]').forEach((output) => {
     const target = Number(output.dataset.target);
@@ -92,7 +137,12 @@ function countUp(root: HTMLElement): void {
   });
 }
 
-/** Wechselt vom "Game over" zum Ergebnis und startet die Feier bzw. den ruhigen Unentschieden-Screen. */
+/**
+ * Switches from the game over panel to the result and starts the celebration. A draw stays calm and gets no fireworks.
+ * @param root - Root element of the end screen.
+ * @param theme - Theme of the finished game.
+ * @param isDraw - True if several players share the top score.
+ */
 function revealResult(root: HTMLElement, theme: ThemeId, isDraw: boolean): void {
   root.dataset.phase = 'result';
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -101,7 +151,13 @@ function revealResult(root: HTMLElement, theme: ThemeId, isDraw: boolean): void 
   if (!reduceMotion) celebrate(root.querySelector('canvas')!, theme);
 }
 
-/** Zeigt das Endergebnis themenbasiert mit Animationen und erlaubt den Rueckweg zum Homescreen. */
+/**
+ * Renders the themed end screen with animations and wires the restart button.
+ * @param content - Container element that receives the screen.
+ * @param scores - Final score per player.
+ * @param theme - Theme of the finished game.
+ * @param onRestart - Called when the user leaves the end screen.
+ */
 export function renderGameOverScreen(content: HTMLElement, scores: Scores, theme: ThemeId, onRestart: () => void): void {
   content.innerHTML = screenTemplate(theme, scores);
   const root = content.querySelector('.endscreen') as HTMLElement;

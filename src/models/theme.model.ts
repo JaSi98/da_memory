@@ -6,7 +6,6 @@ export type PlayerCount = 1 | 2 | 3 | 4;
 export interface ThemeConfig {
   id: ThemeId;
   label: string;
-  icon: string;
   previewMotif: string;
   motifs: string[];
 }
