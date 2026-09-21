@@ -45,11 +45,11 @@ function titleTemplate(theme: ThemeId): string {
 function scoreTemplate(entry: [string, number]): string {
   const [player, points] = entry;
   return `
-    <span class="game-bar__score" data-player="${player}">
-      <i class="game-bar__icon" aria-hidden="true"></i>
+    <li class="game-bar__score" data-player="${player}">
+      <span class="game-bar__icon" aria-hidden="true"></span>
       <span class="game-bar__name">${PLAYER_LABELS[player as PlayerColor]}</span>
       <output data-target="${points}">0</output>
-    </span>`;
+    </li>`;
 }
 
 /**
@@ -61,11 +61,11 @@ function scoreTemplate(entry: [string, number]): string {
 function overTemplate(theme: ThemeId, scores: Scores): string {
   const entries = Object.entries(scores) as [string, number][];
   return `
-    <section class="endscreen__panel endscreen__panel--over">
+    <article class="endscreen__panel endscreen__panel--over">
       <h1 class="endscreen__title">${titleTemplate(theme)}</h1>
       <p class="endscreen__label">Final score</p>
-      <div class="endscreen__scores game-bar__scores">${entries.map(scoreTemplate).join('')}</div>
-    </section>`;
+      <ul class="endscreen__scores game-bar__scores" aria-label="Final score">${entries.map(scoreTemplate).join('')}</ul>
+    </article>`;
 }
 
 /**
@@ -74,7 +74,7 @@ function overTemplate(theme: ThemeId, scores: Scores): string {
  * @returns HTML markup with one span per letter.
  */
 function lettersTemplate(text: string): string {
-  return [...text].map((char, i) => `<span style="--i:${i}">${char}</span>`).join('');
+  return [...text].map((char, i) => `<span style="--i:${i}" aria-hidden="true">${char}</span>`).join('');
 }
 
 /**
@@ -100,12 +100,12 @@ function resultTemplate(theme: ThemeId, scores: Scores): string {
   const winner = leaders.length > 1 ? null : leaders[0];
   const name = winner ? `${PLAYER_LABELS[winner]} Player` : 'DRAW';
   return `
-    <section class="endscreen__panel endscreen__panel--result" data-result="${winner ? 'win' : 'draw'}">
-      <p class="endscreen__kicker">${winner ? 'The <mark>winner</mark> is' : "It's a"}</p>
-      <h2 class="endscreen__name" data-player="${winner ?? 'draw'}">${lettersTemplate(name)}</h2>
-      <div class="endscreen__hero-wrap" data-player="${winner ?? 'draw'}">${heroTemplate(theme, winner)}</div>
+    <article class="endscreen__panel endscreen__panel--result" data-result="${winner ? 'win' : 'draw'}">
+      <p class="endscreen__kicker">${winner ? 'The <strong>winner</strong> is' : "It's a"}</p>
+      <h2 class="endscreen__name" data-player="${winner ?? 'draw'}" aria-label="${name}">${lettersTemplate(name)}</h2>
+      <figure class="endscreen__hero-wrap" data-player="${winner ?? 'draw'}">${heroTemplate(theme, winner)}</figure>
       <button id="restart-btn" class="endscreen__button" type="button">${RESTART_LABELS[theme]}</button>
-    </section>`;
+    </article>`;
 }
 
 /**
@@ -116,11 +116,11 @@ function resultTemplate(theme: ThemeId, scores: Scores): string {
  */
 function screenTemplate(theme: ThemeId, scores: Scores): string {
   return `
-    <main class="endscreen" data-theme="${theme}" data-phase="over">
+    <section class="endscreen" data-theme="${theme}" data-phase="over" aria-label="Game over">
       <canvas class="endscreen__fx" aria-hidden="true"></canvas>
       ${overTemplate(theme, scores)}
       ${resultTemplate(theme, scores)}
-    </main>`;
+    </section>`;
 }
 
 /**

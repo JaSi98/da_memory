@@ -27,7 +27,8 @@ function cardTemplate(card: Card, theme: ThemeId): string {
  */
 export function boardTemplate(cards: Card[], size: BoardSize, theme: ThemeId): string {
   return `
-    <section class="board" data-size="${size}">
+    <section class="board" data-size="${size}" aria-labelledby="board-title">
+      <h2 id="board-title" class="visually-hidden">Cards</h2>
       ${cards.map((card) => cardTemplate(card, theme)).join('')}
     </section>`;
 }

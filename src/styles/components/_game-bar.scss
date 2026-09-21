@@ -199,6 +199,7 @@ $bar-themes: (
 
   &__scores {
     display: flex;
+    list-style: none;
     align-items: center;
     gap: var(--scores-gap);
     height: var(--scores-h);

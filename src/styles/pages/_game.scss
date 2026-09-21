@@ -38,6 +38,8 @@ $game-themes: (
   display: flex;
   flex-direction: column;
   align-items: center;
+  align-self: stretch;
+  width: 100%;
   gap: u(55);
   min-height: 100vh;
   padding: u(40) 0 0;

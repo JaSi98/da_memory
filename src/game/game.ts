@@ -66,9 +66,10 @@ function renderBoard(settings: GameSettings): void {
   const players = getActivePlayers(settings.playerCount);
   const board = boardTemplate(cards, settings.boardSize, settings.theme);
   content.innerHTML = `
-    <main class="game-screen" data-theme="${settings.theme}">
+    <section class="game-screen" data-theme="${settings.theme}" aria-labelledby="game-title">
+      <h1 id="game-title" class="visually-hidden">Memory game</h1>
       ${gameBarTemplate(players, computerPlayer)}${board}
-    </main>`;
+    </section>`;
   content.querySelector('.game-screen')?.addEventListener('click', handleBoardClick as EventListener);
   content.querySelector('#exit-game-btn')?.addEventListener('click', () => showExitPopup(content, onQuit));
 }

@@ -146,7 +146,7 @@ The code follows the guidelines of the Developer Akademie (folder `Guidelines`):
 - File names in kebab-case, functions and variables in camelCase, classes and types in PascalCase, constants in UPPER_CASE.
 - At most 14 lines per function, one task per function.
 - Types and return values are stated explicitly, no `any`.
-- HTML lives in template functions instead of being scattered through the code, and semantic tags are used (`main`, `header`, `section`, `form`, `fieldset`, `button`).
+- HTML lives in template functions instead of being scattered through the code, and semantic tags are used (one `main` container, one `section` per screen, `header`, `nav`, `aside`, `dialog`, `form`, `fieldset`, `button`).
 - Images have meaningful `alt` texts, decorative elements are marked with `aria-hidden`.
 - SCSS in the 7-1 pattern with partials, `@use`, nesting, BEM names, and maps with `@each` for themes.
 

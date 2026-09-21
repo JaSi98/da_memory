@@ -130,6 +130,8 @@ $end-themes: (
   --s: var(--ps);
 
   position: relative;
+  align-self: stretch;
+  width: 100%;
   min-height: 100vh;
   overflow: hidden;
   background: var(--bg-over);
@@ -253,7 +255,8 @@ $end-themes: (
     opacity: 0;
     animation: none;
 
-    mark {
+    strong {
+      font-weight: inherit;
       padding: 0 u(10);
       border-radius: u(8);
       background: #ffe81a;
